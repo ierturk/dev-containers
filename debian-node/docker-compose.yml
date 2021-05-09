@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+
+  debian-base:
+    image: ierturk/debian-base:v1
+    build:
+      context: .
+      dockerfile: base.Dockerfile
+      args:
+        IMAGE_ARCH: linux/arm64/v8
+
+  node-js:
+    image: ierturk/node:v1
+    build:
+      context: .
+      dockerfile: node.Dockerfile
+      args:
+        IMAGE_ARCH: linux/arm64/v8
+        IMAGE_FROM: ierturk/debian-base
+        IMAGE_TAG:  v1
+    network_mode: "host"
+    volumes:
+      - ..:/app
+    working_dir: "/app"
+    # command: "node server.js"
+    # stdin_open: true # docker run -i
+    # tty: true        # docker run -t
