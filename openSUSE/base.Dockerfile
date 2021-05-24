@@ -8,6 +8,7 @@ RUN zypper --non-interactive ref \
             nodejs14 npm14 \
             cross-arm-binutils cross-arm-gcc7 python3 python3-pip \
             wget curl socat \
+            sudo nano\
         && zypper --non-interactive clean -a
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
@@ -16,6 +17,7 @@ RUN npm install -g cmake-js
 ARG USERNAME=ierturk
 RUN useradd -ms /bin/bash ${USERNAME}
 RUN usermod -aG dialout ${USERNAME}
+RUN echo ${USERNAME} ' ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER ${USERNAME}
 RUN curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo && chmod a+x ~/bin/repo
