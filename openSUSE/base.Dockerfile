@@ -6,7 +6,7 @@ RUN zypper --non-interactive ref \
         && zypper --non-interactive in gcc-c++ git cmake pkg-config ninja \
             libboost_headers1_66_0-devel libboost_date_time1_66_0-devel libboost_system1_66_0-devel libboost_filesystem1_66_0-devel \
             nodejs14 npm14 \
-            cross-arm-binutils cross-arm-gcc7 \ 
+            # cross-arm-binutils cross-arm-gcc7 \ 
             python3 python3-pip \
             wget curl socat \
             sudo nano\
