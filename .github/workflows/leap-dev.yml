@@ -30,7 +30,7 @@ jobs:
         with:
           context: ./
           file: ./openSUSE/base.Dockerfile
-          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           push: true
           tags: ierturk/leap-dev:latest
           cache-from: type=registry,ref=ierturk/leap-dev:latest
