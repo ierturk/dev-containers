@@ -30,7 +30,6 @@ jobs:
           platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           tags: ierturk/leap-dev:latest
-          push: true
           cache-from: type=registry,ref=ierturk/leap-dev:latest
           cache-to: type=inline
       -
