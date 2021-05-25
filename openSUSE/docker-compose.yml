@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  comms:
+    image: ierturk/leap-dev
+    build:
+      context: .
+      dockerfile: ./base.Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
