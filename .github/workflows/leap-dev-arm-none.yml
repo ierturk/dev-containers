@@ -1,4 +1,4 @@
-name: Publish Docker image openSUSE Development container
+name: Publish Docker image openSUSE arm-none (bare metal) Development container
 
 on:
   push:
@@ -29,11 +29,11 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./
-          file: ./openSUSE/base.Dockerfile
+          file: ./openSUSE/arm-none.Dockerfile
           platforms: linux/amd64,linux/arm64/v8
           push: true
-          tags: ierturk/leap-dev:latest
-          cache-from: type=registry,ref=ierturk/leap-dev:latest
+          tags: ierturk/leap-dev-arm-none:latest
+          cache-from: type=registry,ref=ierturk/leap-dev-arm-none:latest
           cache-to: type=inline
       -
         name: Image digest
