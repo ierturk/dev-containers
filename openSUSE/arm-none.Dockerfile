@@ -4,7 +4,7 @@ FROM opensuse/leap:${VARIANT}
 RUN zypper --non-interactive ref \
         && zypper --non-interactive in git cmake pkg-config ninja \
             wget curl socat \
-            sudo nano bzip2 \
+            sudo nano bzip2 tar \
         && zypper --non-interactive clean -a
 
 
