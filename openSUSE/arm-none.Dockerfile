@@ -11,7 +11,7 @@ RUN zypper --non-interactive ref \
 
         
 RUN wget -P /var/tmp https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 \
-        && tar -xf /var/tmp/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 -C /opt
+        && tar -xf /var/tmp/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 -C /opt && rm /var/tmp/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
 ENV PATH="/opt/gcc-arm-none-eabi-10-2020-q4-major/bin:${PATH}"
 
 ARG USERNAME=ierturk
