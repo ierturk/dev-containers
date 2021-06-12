@@ -5,7 +5,7 @@ RUN zypper --non-interactive ref \
         && zypper --non-interactive in git cmake pkg-config ninja \
             wget curl socat \
             libncurses5 \
-            sudo nano bzip2 tar \
+            sudo nano gzip bzip2 tar \
         && zypper --non-interactive clean -a
 
 
