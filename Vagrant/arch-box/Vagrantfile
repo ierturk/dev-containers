@@ -1,0 +1,31 @@
+Vagrant.configure(2) do |config|
+  config.vm.box = "ierturk/archlinux"
+  config.vm.box_version = "0.1.0"
+  config.vm.hostname = "arch.int"
+  config.vm.define "arch"
+  config.vm.provider "virtualbox" do |v|
+    # v.name="arch"
+    v.memory = 1024
+    v.cpus = 1
+    v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/workspaces", "1"]
+  end
+
+ # Enable USB Controller on VirtualBox
+  config.vm.provider "virtualbox" do |v|
+    v.customize ["modifyvm", :id, "--usb", "on"]
+    v.customize ["modifyvm", :id, "--usbehci", "on"]
+  end
+
+  # Implement determined configuration attributes
+  config.vm.provider "virtualbox" do |v|
+    v.customize ['usbfilter', 'add', '0', '--target', :id, '--name', 'VC', '--vendorid', ' 0x0403', '--productid', '0x6014']
+  end
+
+  config.vm.synced_folder "/home/ierturk/Work/PROJs/snapdaq-afe", "/workspaces/snapdaq-afe", owner: "vagrant", group: "vagrant"
+  config.vm.synced_folder "/home/ierturk/Work/PROJs/snapdaq-comms-js", "/workspaces/snapdaq-comms-js", owner: "vagrant", group: "vagrant"
+
+  if Vagrant.has_plugin?("vagrant-vbguest") then
+    config.vbguest.auto_update = false
+  end
+  config.vm.network "forwarded_port", guest: 22, host: 2228, auto_correct: false, id: "ssh"
+end
