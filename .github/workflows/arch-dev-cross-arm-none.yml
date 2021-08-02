@@ -30,7 +30,7 @@ jobs:
         with:
           context: ./
           file: ./arch/dev-cross-arm-none.Containerfile
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64/v8
           push: true
           tags: ierturk/arch-dev-cross-arm-none:latest
           cache-from: type=registry,ref=ierturk/arch-dev-cross-arm-none:latest
