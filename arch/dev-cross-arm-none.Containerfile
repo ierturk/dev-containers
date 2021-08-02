@@ -12,15 +12,4 @@ RUN pacman -Syyu --noconfirm \
         arm-none-eabi-gdb \
         arm-none-eabi-newlib \
         && pacman -Scc --noconfirm
-
-ARG USERNAME=ierturk
-RUN useradd -ms /bin/bash ${USERNAME} \
-        && usermod -aG uucp ${USERNAME} \
-        && echo ${USERNAME} ' ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-USER ${USERNAME}
-
-RUN git config --global user.name "Ibrahim ERTURK" \
-        && git config --global user.email "ierturk@ieee.org"
-
-WORKDIR /home/${USERNAME}
+        
