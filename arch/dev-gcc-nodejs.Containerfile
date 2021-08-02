@@ -17,7 +17,7 @@ RUN npm install -g cmake-js \
 
 ARG USERNAME=ierturk
 RUN useradd -ms /bin/bash ${USERNAME} \
-        && usermod -aG dialout ${USERNAME} \
+        && usermod -aG uucp ${USERNAME} \
         && echo ${USERNAME} ' ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER ${USERNAME}
