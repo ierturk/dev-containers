@@ -3,7 +3,8 @@ FROM docker.io/archlinux:${VARIANT}
 
 RUN pacman -Syyu --noconfirm \
         git cmake pkg-config ninja repo\
-        wget curl socat nano \
+        wget curl socat \
+        sudo nano \
         && pacman -Scc --noconfirm
 
 RUN pacman -Syyu --noconfirm \
