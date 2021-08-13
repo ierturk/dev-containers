@@ -1,4 +1,4 @@
-name: Publish Docker image Arch Linux GCC/NodeJs Development container
+name: Publish Docker image Arch Linux Base Development container
 
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
           file: ./arch/dev-base.Containerfile
           platforms: linux/amd64,linux/arm64/v8
           push: true
-          tags: ierturk/arch-dev-gcc-nodejs:latest
+          tags: ierturk/arch-dev-base:latest
           cache-from: type=registry,ref=ierturk/arch-dev-base:latest
           cache-to: type=inline
       -
