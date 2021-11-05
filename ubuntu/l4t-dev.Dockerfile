@@ -1,4 +1,4 @@
-FROM timongentzsch/l4t-ubuntu20-base
+FROM ierturk/l4t-base:latest
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -9,6 +9,9 @@ RUN apt-get update && \
     sudo \
     pkg-config cmake ninja-build \
     build-essential libopencv-dev python3-opencv \
+    libfmt-dev qtbase5-dev qtdeclarative5-dev qtmultimedia5-dev \
+    qml-module-qtquick-* qml-module-qtmultimedia \
+    qml-module-qtquick-* qml-module-qtmultimedia \
 
     && apt-get clean -y && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
