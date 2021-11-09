@@ -6,10 +6,14 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y \
-    sudo \
-    ninja-build \
-    libfmt-dev qtbase5-dev qtdeclarative5-dev qtmultimedia5-dev \
-    qml-module-qtquick-* qml-module-qtmultimedia \
+        sudo \
+        ninja-build \
+        libfmt-dev qtbase5-dev qtdeclarative5-dev qtmultimedia5-dev \
+        qml-module-qtquick-* qml-module-qtmultimedia \
+        libqt5multimedia5 libqt5multimedia5-plugins \
+        libqt5multimediagsttools5 libqt5multimediaquick5 \
+        libqt5multimediawidgets5 gstreamer1.0-qt5 \
+        gstreamer1.0-plugins-good \
 
     && apt-get clean -y && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
