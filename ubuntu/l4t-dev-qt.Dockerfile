@@ -1,4 +1,4 @@
-FROM ierturk/l4t-ocv:latest
+FROM ierturk/l4t-dev-ocv:latest
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -14,7 +14,6 @@ RUN apt-get update && \
         libqt5multimediagsttools5 libqt5multimediaquick5 \
         libqt5multimediawidgets5 gstreamer1.0-qt5 \
         gstreamer1.0-plugins-good \
-
     && apt-get clean -y && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 # Create ubuntu user with sudo privileges

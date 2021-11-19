@@ -1,4 +1,4 @@
-FROM ierturk/l4t-base:latest
+FROM ierturk/l4t-dev-base:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -11,7 +11,7 @@ RUN apt-get update && \
     gcc-8 g++-8 \
     cmake git unzip pkg-config \
     python3-dev python3-pip \
-    cuda-toolkit-10-2 && \
+    cuda-toolkit-10-2 nvidia-cudnn8 && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
