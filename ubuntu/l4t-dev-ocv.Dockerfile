@@ -1,72 +1,133 @@
-FROM ierturk/l4t-dev-cuda:latest
-
-ARG DEBIAN_FRONTEND=noninteractive
-ARG OPEN_CV_VERSION=4.5.4
-
-### TODO: Add multistagebuild with crosscompile image ###
-
 # 
-# install opencv deps
+# This is a Dockerfile for building OpenCV debian packages
+# with CUDA, cuDNN, GStreamer, ect enabled.  You can then take
+# the output .deb packages and install them into other containers.
 #
+# See scripts/docker_build_opencv.sh to run it
+#
+
+ARG BASE_IMAGE=ierturk/l4t-dev-cuda:latest
+FROM ${BASE_IMAGE}
+
+USER root
+
+#
+# setup environment
+#
+ENV DEBIAN_FRONTEND=noninteractive
+ENV CUDA_HOME="/usr/local/cuda"
+ENV PATH="/usr/local/cuda/bin:${PATH}"
+ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
+
+WORKDIR /opt
+
+#
+# OpenCV - https://github.com/mdegans/nano_build_opencv/blob/master/build_opencv.sh
+#
+ARG OPENCV_VERSION="4.5.4"
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    libjpeg-dev libpng-dev libtiff-dev \
-    libavcodec-dev libavformat-dev libswscale-dev \
-    libgtk-3-dev libcanberra-gtk* \
-    python3-dev python3-numpy python3-pip \
-    libxvidcore-dev libx264-dev libgtk-3-dev \
-    libtbb2 libtbb-dev libdc1394-22-dev \
-    gstreamer1.0-tools libv4l-dev v4l-utils \
-    libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-    libswresample-dev libvorbis-dev libxine2-dev \
-    libfaac-dev libmp3lame-dev libtheora-dev \
-    libopencore-amrnb-dev libopencore-amrwb-dev \
-    libopenblas-dev libatlas-base-dev libblas-dev \
-    liblapack-dev libeigen3-dev gfortran \
-    libhdf5-dev protobuf-compiler \
-    libprotobuf-dev libgoogle-glog-dev libgflags-dev \
-    qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools \
-    file && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean
+        build-essential \
+	   gfortran \
+        cmake \
+        git \
+	   file \
+	   tar \
+	   python3-pip \
+	   python3-dev \
+	   python3-numpy \
+	   python3-distutils \
+	   python3-setuptools \
+        libatlas-base-dev \
+        libavcodec-dev \
+        libavformat-dev \
+        libavresample-dev \
+        libcanberra-gtk3-module \
+        libdc1394-22-dev \
+        libeigen3-dev \
+        libglew-dev \
+        libgstreamer-plugins-base1.0-dev \
+        libgstreamer-plugins-good1.0-dev \
+        libgstreamer1.0-dev \
+        libgtk-3-dev \
+        libjpeg-dev \
+        libjpeg8-dev \
+        libjpeg-turbo8-dev \
+        liblapack-dev \
+        liblapacke-dev \
+        libopenblas-dev \
+        libpng-dev \
+        libpostproc-dev \
+        libswscale-dev \
+        libtbb-dev \
+        libtbb2 \
+        libtesseract-dev \
+        libtiff-dev \
+        libv4l-dev \
+        libxine2-dev \
+        libxvidcore-dev \
+        libx264-dev \
+	   libgtkglext1 \
+	   libgtkglext1-dev \
+        pkg-config \
+        qv4l2 \
+        v4l-utils \
+        v4l2ucp \
+        zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
-RUN git clone --depth 1 https://github.com/opencv/opencv.git -b ${OPEN_CV_VERSION} && \
-    git clone --depth 1 https://github.com/opencv/opencv_contrib.git -b ${OPEN_CV_VERSION}
+# OpenCV looks for the cuDNN version in cudnn_version.h, but it's been renamed to cudnn_version_v8.h
+RUN ln -s /usr/include/aarch64-linux-gnu/cudnn_version_v8.h /usr/include/aarch64-linux-gnu/cudnn_version.h
 
-# 
-# build opencv debian packages from source.
-# the generated .deb files will be found in release/*.deb .
-# they will install opencv in /usr/local so it will not conflict with native ubuntu
-# opencv installed version and will receive precedence with ld when loading opencv libraries
-#
+RUN git clone --depth 1 --branch ${OPENCV_VERSION} https://github.com/opencv/opencv.git && \
+    git clone --depth 1 --branch ${OPENCV_VERSION} https://github.com/opencv/opencv_contrib.git
+
 RUN cd opencv && \
-    mkdir release && \
-    cd release && \
-    cmake -D OPENCV_ENABLE_NONFREE=ON \
-            -D CUDA_ARCH_BIN="7.2,5.3" \
-            -D WITH_CUDA=ON \
-	        -D WITH_CUDNN=ON \
-	        -D OPENCV_DNN_CUDA=ON \
-	        -D ENABLE_FAST_MATH=1 \
-	        -D CUDA_FAST_MATH=1 \
-	        -D WITH_CUBLAS=1 \
-            -D CUDA_ARCH_PTX="" \
-            -D OPENCV_GENERATE_PKGCONFIG=ON \
-            -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
-            -D WITH_LIBV4L=ON \
-            -D BUILD_opencv_python3=ON \
-            -D BUILD_TESTS=OFF \
-            -D BUILD_PERF_TESTS=OFF \
-            -D BUILD_EXAMPLES=OFF \
-            -D CMAKE_BUILD_TYPE=RELEASE \
-            -D CPACK_BINARY_DEB=ON \
-            -D CPACK_SET_DESTDIR=OFF \
-            -D CPACK_PACKAGING_INSTALL_PREFIX=/usr/local .. && \
-    make -j$(nproc) && \
-    make install
+    mkdir build && \
+    cd build && \
+    cmake \
+        -D CPACK_BINARY_DEB=ON \
+	   -D BUILD_EXAMPLES=OFF \
+        -D BUILD_opencv_python2=OFF \
+        -D BUILD_opencv_python3=ON \
+	   -D BUILD_opencv_java=OFF \
+        -D CMAKE_BUILD_TYPE=RELEASE \
+        -D CMAKE_INSTALL_PREFIX=/usr/local \
+        -D CUDA_ARCH_BIN=5.3,6.2,7.2 \
+        -D CUDA_ARCH_PTX= \
+        -D CUDA_FAST_MATH=ON \
+        -D CUDNN_INCLUDE_DIR=/usr/include/aarch64-linux-gnu \
+        -D EIGEN_INCLUDE_PATH=/usr/include/eigen3 \
+	   -D WITH_EIGEN=ON \
+        -D ENABLE_NEON=ON \
+        -D OPENCV_DNN_CUDA=ON \
+        -D OPENCV_ENABLE_NONFREE=ON \
+        -D OPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib/modules \
+        -D OPENCV_GENERATE_PKGCONFIG=ON \
+        -D WITH_CUBLAS=ON \
+        -D WITH_CUDA=ON \
+        -D WITH_CUDNN=ON \
+        -D WITH_GSTREAMER=ON \
+        -D WITH_LIBV4L=ON \
+        -D WITH_OPENGL=ON \
+	   -D WITH_OPENCL=OFF \
+	   -D WITH_IPP=OFF \
+        -D WITH_TBB=ON \
+	   -D BUILD_TIFF=ON \
+	   -D BUILD_PERF_TESTS=OFF \
+	   -D BUILD_TESTS=OFF \
+	   ../
+	   
+RUN cd opencv/build && make -j$(nproc)
+RUN cd opencv/build && make install
+RUN cd opencv/build && make package
 
-RUN cd opencv/release && \
-        make package
+RUN cd opencv/build && tar -czvf OpenCV-${OPENCV_VERSION}-aarch64.tar.gz *.deb
+    
+# Set as default user
+USER ierturk
+WORKDIR /home/ierturk
 
 CMD ["bash"]
-WORKDIR /root
