@@ -1,32 +1,23 @@
-# 
-# This is a Dockerfile for building OpenCV debian packages
-# with CUDA, cuDNN, GStreamer, ect enabled.  You can then take
-# the output .deb packages and install them into other containers.
-#
-# See scripts/docker_build_opencv.sh to run it
-#
+FROM ierturk/l4t-base:latest
 
-ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r32.6.1
-FROM ${BASE_IMAGE}
+USER root
 
 #
-# setup environment
+# Build tools
 #
-ENV DEBIAN_FRONTEND=noninteractive
-
-
-# install sudo
-RUN apt update && \
-    apt install -y --no-install-recommends \
-    sudo && \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc-8 g++-8 \
+    cmake git unzip pkg-config \
+    python3-dev python3-pip \
+    cuda-toolkit-10-2 nvidia-cudnn8 && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-# Create ubuntu user with sudo privileges
-RUN useradd -ms /bin/bash ierturk && \
-    usermod -aG sudo ierturk
-# New added for disable sudo password
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# Required for cuda compiler
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 8 && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 8
 
 # Set as default user
 USER ierturk

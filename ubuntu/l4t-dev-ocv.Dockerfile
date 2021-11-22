@@ -6,7 +6,7 @@
 # See scripts/docker_build_opencv.sh to run it
 #
 
-ARG BASE_IMAGE=ierturk/l4t-dev-cuda:latest
+ARG BASE_IMAGE=ierturk/l4t-dev-base:latest
 FROM ${BASE_IMAGE}
 
 USER root
@@ -29,16 +29,17 @@ ARG OPENCV_VERSION="4.5.4"
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
-	   gfortran \
+        gfortran \
         cmake \
         git \
-	   file \
-	   tar \
-	   python3-pip \
-	   python3-dev \
-	   python3-numpy \
-	   python3-distutils \
-	   python3-setuptools \
+        file \
+        tar \
+        ninja-build \
+        python3-pip \
+        python3-dev \
+        python3-numpy \
+        python3-distutils \
+        python3-setuptools \
         libatlas-base-dev \
         libavcodec-dev \
         libavformat-dev \
@@ -68,8 +69,8 @@ RUN apt-get update && \
         libxine2-dev \
         libxvidcore-dev \
         libx264-dev \
-	   libgtkglext1 \
-	   libgtkglext1-dev \
+        libgtkglext1 \
+        libgtkglext1-dev \
         pkg-config \
         qv4l2 \
         v4l-utils \
@@ -84,15 +85,17 @@ RUN ln -s /usr/include/aarch64-linux-gnu/cudnn_version_v8.h /usr/include/aarch64
 RUN git clone --depth 1 --branch ${OPENCV_VERSION} https://github.com/opencv/opencv.git && \
     git clone --depth 1 --branch ${OPENCV_VERSION} https://github.com/opencv/opencv_contrib.git
 
+# Build fails with the option -D WITH_OPENGL=ON \
+
 RUN cd opencv && \
     mkdir build && \
     cd build && \
     cmake \
         -D CPACK_BINARY_DEB=ON \
-	   -D BUILD_EXAMPLES=OFF \
+        -D BUILD_EXAMPLES=OFF \
         -D BUILD_opencv_python2=OFF \
         -D BUILD_opencv_python3=ON \
-	   -D BUILD_opencv_java=OFF \
+        -D BUILD_opencv_java=OFF \
         -D CMAKE_BUILD_TYPE=RELEASE \
         -D CMAKE_INSTALL_PREFIX=/usr/local \
         -D CUDA_ARCH_BIN=5.3,6.2,7.2 \
@@ -100,7 +103,7 @@ RUN cd opencv && \
         -D CUDA_FAST_MATH=ON \
         -D CUDNN_INCLUDE_DIR=/usr/include/aarch64-linux-gnu \
         -D EIGEN_INCLUDE_PATH=/usr/include/eigen3 \
-	   -D WITH_EIGEN=ON \
+        -D WITH_EIGEN=ON \
         -D ENABLE_NEON=ON \
         -D OPENCV_DNN_CUDA=ON \
         -D OPENCV_ENABLE_NONFREE=ON \
@@ -111,14 +114,14 @@ RUN cd opencv && \
         -D WITH_CUDNN=ON \
         -D WITH_GSTREAMER=ON \
         -D WITH_LIBV4L=ON \
-        -D WITH_OPENGL=ON \
-	   -D WITH_OPENCL=OFF \
-	   -D WITH_IPP=OFF \
+        -D WITH_OPENCL=OFF \
+        -D WITH_IPP=OFF \
         -D WITH_TBB=ON \
-	   -D BUILD_TIFF=ON \
-	   -D BUILD_PERF_TESTS=OFF \
-	   -D BUILD_TESTS=OFF \
-	   ../
+        -D BUILD_TIFF=ON \
+        -D BUILD_PERF_TESTS=OFF \
+        -D BUILD_TESTS=OFF \
+        -DOPENCV_CUDA_FORCE_BUILTIN_CMAKE_MODULE=ON \
+        ../
 	   
 RUN cd opencv/build && make -j$(nproc)
 RUN cd opencv/build && make install
