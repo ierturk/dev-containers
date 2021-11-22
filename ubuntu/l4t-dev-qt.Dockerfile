@@ -24,7 +24,6 @@ RUN apt-get update && \
         libevdev-dev libpulse-dev \
         libasound2-dev libturbojpeg0-dev lsb-release \
         qtbase5-private-dev libqt5websockets5-dev \
-
     && apt-get clean -y && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 #

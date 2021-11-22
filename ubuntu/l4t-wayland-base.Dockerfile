@@ -4,7 +4,7 @@
 # the output .deb packages and install them into other containers.
 #
 
-ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r32.6.1
+ARG BASE_IMAGE=ierturk/l4t-base:latest
 FROM ${BASE_IMAGE}
 
 USER root
