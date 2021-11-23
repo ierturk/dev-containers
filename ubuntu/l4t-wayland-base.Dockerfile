@@ -1,7 +1,5 @@
 # 
-# This is a Dockerfile for Wayland Display Server debian packages
-# with CUDA, cuDNN, GStreamer, ect enabled.  You can then take
-# the output .deb packages and install them into other containers.
+# This is a Dockerfile for Wayland Display Server
 #
 
 ARG BASE_IMAGE=ierturk/l4t-base:latest

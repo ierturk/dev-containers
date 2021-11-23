@@ -1,10 +1,5 @@
 # 
-# This is a Dockerfile for building OpenCV debian packages
-# with CUDA, cuDNN, GStreamer, ect enabled.  You can then take
-# the output .deb packages and install them into other containers.
-#
-# See scripts/docker_build_opencv.sh to run it
-#
+# This is a Dockerfile for L4T-BASE
 
 ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r32.6.1
 FROM ${BASE_IMAGE}
