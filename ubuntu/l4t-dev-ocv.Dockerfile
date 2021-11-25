@@ -3,11 +3,8 @@
 # with CUDA, cuDNN, GStreamer, ect enabled.  You can then take
 # the output .deb packages and install them into other containers.
 #
-# See scripts/docker_build_opencv.sh to run it
-#
 
-ARG BASE_IMAGE=ierturk/l4t-dev-base:latest
-FROM ${BASE_IMAGE}
+FROM ierturk/l4t-dev-base:latest
 
 USER root
 
@@ -74,7 +71,6 @@ RUN apt-get update && \
         pkg-config \
         qv4l2 \
         v4l-utils \
-        v4l2ucp \
         zlib1g-dev \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
@@ -120,7 +116,6 @@ RUN cd opencv && \
         -D BUILD_TIFF=ON \
         -D BUILD_PERF_TESTS=OFF \
         -D BUILD_TESTS=OFF \
-        -DOPENCV_CUDA_FORCE_BUILTIN_CMAKE_MODULE=ON \
         ../
 	   
 RUN cd opencv/build && make -j$(nproc)

@@ -1,10 +1,17 @@
+# 
+# This is a Dockerfile for L4T-DEV-BASE
+#
+
 FROM ierturk/l4t-base:latest
+
+ARG DEBIAN_FRONTEND=noninteractive
 
 USER root
 
 #
 # Build tools
 #
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     build-essential \

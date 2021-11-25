@@ -1,20 +1,38 @@
 version: '3.4'
 
 services:
-  l4t-dev:
-    image: ierturk/l4t-dev
+  base:
+    image: ierturk/l4t-base:latest
     build:
       context: .
-      dockerfile: ./l4t-dev.Dockerfile
-    # environment:
-      # NODE_ENV: development
-    # ports:
-      # - 3000:3000cd ..
-      # - 9229:9229
-    network_mode: "host"
-    # command: ["node", "--inspect=0.0.0.0:9229", "Source/server.js"]
-    volumes:
-      - ../zxing-cpp/:/workspaces
-    working_dir: /workspaces
-    # devices: 
-    #   - /dev/ttyUSB0
+      dockerfile: l4t-base.Dockerfile
+    runtime: nvidia
+    network_mode: host
+    privileged: true
+    user: ierturk
+    working_dir: /workspace
+    command: /bin/bash
+
+  dev-base:
+    image: ierturk/l4t-dev-base:latest
+    build:
+      context: .
+      dockerfile: l4t-dev-base.Dockerfile
+    runtime: nvidia
+    network_mode: host
+    privileged: true
+    user: ierturk
+    working_dir: /workspace
+    command: /bin/bash
+
+  dev-ocv:
+    image: ierturk/l4t-dev-ocv:latest
+    build:
+      context: .
+      dockerfile: l4t-dev-ocv.Dockerfile
+    runtime: nvidia
+    network_mode: host
+    privileged: true
+    user: ierturk
+    working_dir: /workspace
+    command: /bin/bash
