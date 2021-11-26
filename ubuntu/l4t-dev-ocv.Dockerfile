@@ -31,7 +31,6 @@ RUN apt-get update && \
         git \
         file \
         tar \
-        ninja-build \
         python3-pip \
         python3-dev \
         python3-numpy \
@@ -71,17 +70,17 @@ RUN apt-get update && \
         pkg-config \
         qv4l2 \
         v4l-utils \
+        v4l2ucp \
         zlib1g-dev \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
-
-# OpenCV looks for the cuDNN version in cudnn_version.h, but it's been renamed to cudnn_version_v8.h
-RUN ln -s /usr/include/aarch64-linux-gnu/cudnn_version_v8.h /usr/include/aarch64-linux-gnu/cudnn_version.h
 
 RUN git clone --depth 1 --branch ${OPENCV_VERSION} https://github.com/opencv/opencv.git && \
     git clone --depth 1 --branch ${OPENCV_VERSION} https://github.com/opencv/opencv_contrib.git
 
 # Build fails with the option -D WITH_OPENGL=ON \
+# OpenCV looks for the cuDNN version in cudnn_version.h, but it's been renamed to cudnn_version_v8.h
+# RUN ln -s /usr/include/aarch64-linux-gnu/cudnn_version_v8.h /usr/include/aarch64-linux-gnu/cudnn_version.h
 
 RUN cd opencv && \
     mkdir build && \
@@ -97,7 +96,7 @@ RUN cd opencv && \
         -D CUDA_ARCH_BIN=5.3,6.2,7.2 \
         -D CUDA_ARCH_PTX= \
         -D CUDA_FAST_MATH=ON \
-        -D CUDNN_INCLUDE_DIR=/usr/include/aarch64-linux-gnu \
+        -D CUDNN_INCLUDE_DIR=/usr/local/cuda-10.2/cudnn_inc_8 \
         -D EIGEN_INCLUDE_PATH=/usr/include/eigen3 \
         -D WITH_EIGEN=ON \
         -D ENABLE_NEON=ON \

@@ -36,3 +36,37 @@ services:
     user: ierturk
     working_dir: /workspace
     command: /bin/bash
+
+  dev-qt:
+    image: ierturk/l4t-dev-qt:latest
+    build:
+      context: .
+      dockerfile: l4t-dev-qt.Dockerfile
+    runtime: nvidia
+    environment:
+      - WAYLAND_USER=ierturk
+      - XDG_RUNTIME_DIR=/run/user/1000
+      - WAYLAND_DISPLAY=wayland-0
+      - DISPLAY=:0
+      # - LIBGL_ALWAYS_INDIRECT=0
+    volumes:
+      - type: bind
+        source: /tmp/.X11-unix
+        target: /tmp/.X11-unix
+      - type: bind
+        source: /var/run/dbus
+        target: /var/run/dbus
+      - type: bind
+        source: /dev/dri
+        target: /dev/dri
+      - type: bind
+        source: /run/user/1000
+        target: /run/user/1000
+      - type: bind
+        source: ../..
+        target: /workspace
+    network_mode: host
+    privileged: true
+    user: ierturk
+    working_dir: /workspace
+    command: /bin/bash
