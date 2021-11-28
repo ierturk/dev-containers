@@ -19,7 +19,6 @@ RUN apt-get update && \
     cmake git unzip pkg-config ninja-build \
     wget curl \
     python3-dev python3-pip && \
-    # cuda-toolkit-10-2 nvidia-cudnn8 && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 

@@ -1,7 +1,47 @@
-../qt-everywhere-src-5.15.2/configure -kms -opengl es2 -prefix /usr/local/qt5jnano -opensource -confirm-license -skip qtscript -skip wayland -skip qtwebengine -force-debug-info -skip qtlocation -nomake examples -make libs -pkg-config -no-use-gold-linker -v
+../qt-everywhere-src-5.15.2/configure -no-xcb -kms -eglfs -opengl es2 -prefix /usr/local/qt5jnano -opensource -confirm-license -skip qtscript -skip qtwebengine -force-debug-info -skip qtlocation -nomake examples -make libs -pkg-config -no-use-gold-linker -v
 
 sudo apt install libvulkan-dev
 udo apt install libnvidia-egl-wayland-dev libgegl-dev
 sudo apt install libgbm-dev
 sudo apt install libglu1-mesa-dev libxrender-dev
 libdrm-dev
+
+-skip wayland
+
+
+
+
+
+
+    cmake \
+        -D CPACK_BINARY_DEB=ON \
+        -D BUILD_EXAMPLES=OFF \
+        -D BUILD_opencv_python2=OFF \
+        -D BUILD_opencv_python3=ON \
+        -D BUILD_opencv_java=OFF \
+        -D CMAKE_BUILD_TYPE=RELEASE \
+        -D CMAKE_INSTALL_PREFIX=/usr/local \
+        -D CUDA_ARCH_BIN=5.3,6.2,7.2 \
+        -D CUDA_ARCH_PTX= \
+        -D CUDA_FAST_MATH=ON \
+        -D CUDNN_INCLUDE_DIR=/usr/local/cuda-10.2/cudnn_inc_8 \
+        -D EIGEN_INCLUDE_PATH=/usr/include/eigen3 \
+        -D WITH_EIGEN=ON \
+        -D ENABLE_NEON=ON \
+        -D OPENCV_DNN_CUDA=ON \
+        -D OPENCV_ENABLE_NONFREE=ON \
+        -D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules \
+        -D OPENCV_GENERATE_PKGCONFIG=ON \
+        -D WITH_CUBLAS=ON \
+        -D WITH_CUDA=ON \
+        -D WITH_CUDNN=ON \
+        -D WITH_GSTREAMER=ON \
+        -D WITH_LIBV4L=ON \
+        -D WITH_OPENCL=OFF \
+        -D WITH_IPP=OFF \
+        -D WITH_TBB=ON \
+        -D BUILD_TIFF=ON \
+        -D BUILD_PERF_TESTS=OFF \
+        -D BUILD_TESTS=OFF \
+        ../opencv
+
