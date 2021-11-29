@@ -1,4 +1,4 @@
-../qt-everywhere-src-5.15.2/configure -no-xcb -kms -eglfs -opengl es2 -prefix /usr/local/qt5jnano -opensource -confirm-license -skip qtscript -skip qtwebengine -force-debug-info -skip qtlocation -nomake examples -make libs -pkg-config -no-use-gold-linker -v
+../qt-everywhere-src-5.15.2/configure -kms -eglfs -opengl es2 -prefix /usr/local/qt5jnano -opensource -confirm-license -skip qtscript -skip qtwebengine -force-debug-info -skip qtlocation -nomake examples -make libs -pkg-config -no-use-gold-linker -v
 
 sudo apt install libvulkan-dev
 udo apt install libnvidia-egl-wayland-dev libgegl-dev
@@ -13,7 +13,7 @@ libdrm-dev
 
 
 
-    cmake \
+cmake \
         -D CPACK_BINARY_DEB=ON \
         -D BUILD_EXAMPLES=OFF \
         -D BUILD_opencv_python2=OFF \
@@ -21,10 +21,10 @@ libdrm-dev
         -D BUILD_opencv_java=OFF \
         -D CMAKE_BUILD_TYPE=RELEASE \
         -D CMAKE_INSTALL_PREFIX=/usr/local \
-        -D CUDA_ARCH_BIN=5.3,6.2,7.2 \
+        -D CUDA_ARCH_BIN=5.3 \
         -D CUDA_ARCH_PTX= \
         -D CUDA_FAST_MATH=ON \
-        -D CUDNN_INCLUDE_DIR=/usr/local/cuda-10.2/cudnn_inc_8 \
+        -D CUDNN_INCLUDE_DIR=/usr/include/aarch64-linux-gnu \
         -D EIGEN_INCLUDE_PATH=/usr/include/eigen3 \
         -D WITH_EIGEN=ON \
         -D ENABLE_NEON=ON \
@@ -44,4 +44,3 @@ libdrm-dev
         -D BUILD_PERF_TESTS=OFF \
         -D BUILD_TESTS=OFF \
         ../opencv
-

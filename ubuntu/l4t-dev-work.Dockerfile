@@ -4,7 +4,7 @@
 #
 
 FROM ierturk/l4t-dev-libs:latest
-    
+
 # Set as default user
 USER ierturk
 WORKDIR /home/ierturk

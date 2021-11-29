@@ -11,10 +11,6 @@ USER root
 #
 # setup environment
 #
-ENV DEBIAN_FRONTEND=noninteractive
-ENV CUDA_HOME="/usr/local/cuda"
-ENV PATH="/usr/local/cuda/bin:${PATH}"
-ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \

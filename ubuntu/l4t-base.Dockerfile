@@ -2,7 +2,7 @@
 # This is a Dockerfile for L4T-BASE
 #
 
-FROM nvcr.io/nvidia/l4t-base:r32.6.1
+FROM ubuntu:bionic
 
 ARG L4T_RELEASE_MAJOR=32.6
 ARG L4T_RELEASE_MINOR=1
