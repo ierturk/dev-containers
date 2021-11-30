@@ -85,6 +85,9 @@ services:
         source: /dev/video0
         target: /dev/video0
       - type: bind
+        source: /dev/input
+        target: /dev/input
+      - type: bind
         source: ../..
         target: /workspace
     network_mode: host

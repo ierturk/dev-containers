@@ -61,6 +61,47 @@ RUN apt-get update && \
         v4l-utils \
         v4l2ucp \
         zlib1g-dev \
+        libvulkan-dev \
+        libgegl-dev  \
+        libgbm-dev  \
+        libglu1-mesa-dev \
+        libxrender-dev \
+        libdrm-dev \
+        libudev-dev \
+        libinput-dev \
+        libts-dev \
+        libgstreamer1.0-0 \
+        gstreamer1.0-plugins-base \
+        gstreamer1.0-plugins-good \
+        gstreamer1.0-plugins-bad \
+        gstreamer1.0-plugins-ugly \
+        gstreamer1.0-libav \
+        gstreamer1.0-doc \
+        gstreamer1.0-tools \
+        gstreamer1.0-x \
+        gstreamer1.0-alsa \
+        gstreamer1.0-gl \
+        gstreamer1.0-gtk3 \
+        gstreamer1.0-qt5 \
+        gstreamer1.0-pulseaudio \
+        libv4l-dev \
+        libavcodec-dev \
+        libavformat-dev \
+        libavutil-dev \
+        libswscale-dev \
+        libavresample-dev \
+        libudev-dev \
+        libavcodec-extra \
+        freeglut3 \
+        freeglut3-dev \
+        libjpeg-turbo8-dev \
+        libusb-1.0-0-dev \
+        libusb-dev \
+        libevdev-dev \
+        libpulse-dev \
+        libasound2-dev \
+        libturbojpeg0-dev \
+        lsb-release \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
     
