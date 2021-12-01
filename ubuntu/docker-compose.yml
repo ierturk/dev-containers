@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: l4t-base.Dockerfile
-    # runtime: nvidia
+    runtime: nvidia
     network_mode: host
     privileged: true
     user: ierturk
@@ -18,7 +18,7 @@ services:
     build:
       context: .
       dockerfile: l4t-dev-base.Dockerfile
-    # runtime: nvidia
+    runtime: nvidia
     network_mode: host
     privileged: true
     user: ierturk
@@ -30,7 +30,7 @@ services:
     build:
       context: .
       dockerfile: l4t-dev-libs.Dockerfile
-    # runtime: nvidia
+    runtime: nvidia
     network_mode: host
     privileged: true
     user: ierturk
@@ -42,11 +42,14 @@ services:
     build:
       context: .
       dockerfile: l4t-dev-work.Dockerfile
-    # runtime: nvidia
+    runtime: nvidia
     volumes:
       - type: bind
         source: ../..
         target: /workspace
+      - type: bind
+        source: /usr/include
+        target: /workspace/cudnn_header
     network_mode: host
     privileged: true
     user: ierturk
@@ -59,9 +62,10 @@ services:
       - seccomp:unconfined
     shm_size: 256mb
     device_cgroup_rules:
-      # ... for /dev/dri devices
       - 'c 226:* rmw'
-    # runtime: nvidia
+      - 'c 81:* rmw'
+      - 'c 13:* rmw'
+    runtime: nvidia
     environment:
       - WAYLAND_USER=ierturk
       - XDG_RUNTIME_DIR=/run/user/1000
@@ -81,6 +85,10 @@ services:
       - type: bind
         source: /run/user/1000
         target: /run/user/1000
+      - type: bind
+        source: /run/udev
+        target: /run/udev
+        read_only: true
       - type: bind
         source: /dev/video0
         target: /dev/video0

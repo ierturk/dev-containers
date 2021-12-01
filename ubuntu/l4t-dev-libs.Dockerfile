@@ -28,7 +28,7 @@ RUN apt-get update && \
         libatlas-base-dev \
         libavcodec-dev \
         libavformat-dev \
-        libavresample-dev \
+        # libavresample-dev \
         libcanberra-gtk3-module \
         libdc1394-22-dev \
         libeigen3-dev \
@@ -57,9 +57,9 @@ RUN apt-get update && \
         libgtkglext1 \
         libgtkglext1-dev \
         pkg-config \
-        qv4l2 \
+        # qv4l2 \
         v4l-utils \
-        v4l2ucp \
+        # v4l2ucp \
         zlib1g-dev \
         libvulkan-dev \
         libgegl-dev  \
@@ -76,7 +76,7 @@ RUN apt-get update && \
         gstreamer1.0-plugins-bad \
         gstreamer1.0-plugins-ugly \
         gstreamer1.0-libav \
-        gstreamer1.0-doc \
+        # gstreamer1.0-doc \
         gstreamer1.0-tools \
         gstreamer1.0-x \
         gstreamer1.0-alsa \
@@ -89,7 +89,7 @@ RUN apt-get update && \
         libavformat-dev \
         libavutil-dev \
         libswscale-dev \
-        libavresample-dev \
+        # libavresample-dev \
         libudev-dev \
         libavcodec-extra \
         freeglut3 \
