@@ -34,7 +34,7 @@ RUN chmod 644 /etc/apt/trusted.gpg.d/jetson-ota-public.asc && \
 # Tegra setup
 #
 RUN apt-get update && \
-    apt-get install -y libglu1-mesa-dev freeglut3 freeglut3-dev unzip dialog && \
+    apt-get install -y libglu1-mesa-dev freeglut3 freeglut3-dev unzip dialog udev && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
@@ -45,7 +45,7 @@ RUN mkdir -p /usr/share/glvnd/egl_vendor.d/ && \
     echo '{"file_format_version" : "1.0.0" , "ICD" : { "library_path" : "libEGL_nvidia.so.0" }}' > /usr/share/glvnd/egl_vendor.d/10_nvidia.json
 RUN mkdir -p /usr/share/egl/egl_external_platform.d/ && \
     echo '{"file_format_version" : "1.0.0" , "ICD" : { "library_path" : "libnvidia-egl-wayland.so.1" }}' > /usr/share/egl/egl_external_platform.d/nvidia_wayland.json
-RUN echo "/usr/local/cuda-$CUDA/targets/aarch64-linux/lib" >> /etc/ld.so.conf.d/nvidia.conf
+RUN echo "/usr/local/cuda-$CUDA/lib" >> /etc/ld.so.conf.d/nvidia.conf
 
 RUN ldconfig
 
@@ -53,7 +53,7 @@ RUN ldconfig
 # Update environment
 #
 ENV PATH /usr/local/cuda-$CUDA/bin:/usr/local/cuda/bin:${PATH}
-ENV LD_LIBRARY_PATH /usr/local/cuda-$CUDA/targets/aarch64-linux/lib:${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH /usr/local/cuda-$CUDA/lib:${LD_LIBRARY_PATH}
 ENV LD_LIBRARY_PATH=/opt/nvidia/vpi1/lib64:${LD_LIBRARY_PATH}
 ENV LD_LIBRARY_PATH=/usr/lib/aarch64-linux-gnu/tegra:${LD_LIBRARY_PATH}
 ENV LD_LIBRARY_PATH=/usr/lib/aarch64-linux-gnu/tegra-egl:${LD_LIBRARY_PATH}

@@ -61,17 +61,30 @@ services:
     security_opt:
       - seccomp:unconfined
     shm_size: 256mb
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+      # - SYS_PTRACE
     device_cgroup_rules:
-      - 'c 226:* rmw'
+      - 'c 4:0 rmw'
+      - 'c 4:7 rmw'
       - 'c 81:* rmw'
       - 'c 13:* rmw'
+      - 'c 199:* rmw'
+      - 'c 226:* rmw'
     runtime: nvidia
     environment:
       - WAYLAND_USER=ierturk
       - XDG_RUNTIME_DIR=/run/user/1000
       - WAYLAND_DISPLAY=wayland-0
       - DISPLAY=:0
+      - QT_QPA_PLATFORM=wayland
       # - LIBGL_ALWAYS_INDIRECT=0
+      # - QT_QPA_PLATFORM=eglfs
+      # - QT_QPA_EGLFS_ALWAYS_SET_MODE=1
+      - QT_LOGGING_RULES=qt.qpa.*=true
+      - QT_LOGGING_RULES=qt.qpa.wayland.*=false
+      # - QT_QPA_EGLFS_INTEGRATION=eglfs_kms
+      - QT_QPA_EGLFS_KMS_CONFIG=/workspace/kms.conf
     volumes:
       - type: bind
         source: /tmp/.X11-unix
@@ -98,7 +111,13 @@ services:
       - type: bind
         source: ../..
         target: /workspace
+      - type: bind
+        source: /usr/include
+        target: /workspace/cudnn_header
+      - ~/.ssh:/home/ierturk/.ssh:ro
     network_mode: host
+    # ports:
+    #   - 22:2222
     privileged: true
     user: ierturk
     working_dir: /workspace
