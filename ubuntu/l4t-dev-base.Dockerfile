@@ -15,7 +15,7 @@ USER root
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     build-essential \
-    gcc-8 g++-8 \
+    gcc-8 g++-8 gdb \
     cmake git unzip pkg-config ninja-build \
     wget curl rsync \
     python3-dev python3-pip python3-numpy && \

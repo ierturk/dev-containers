@@ -1,4 +1,4 @@
-version: '3.4'
+version: '2.3'
 
 services:
   base:
@@ -6,7 +6,6 @@ services:
     build:
       context: .
       dockerfile: l4t-base.Dockerfile
-    runtime: nvidia
     network_mode: host
     privileged: true
     user: ierturk
@@ -18,7 +17,17 @@ services:
     build:
       context: .
       dockerfile: l4t-dev-base.Dockerfile
-    runtime: nvidia
+    network_mode: host
+    privileged: true
+    user: ierturk
+    working_dir: /workspace
+    command: /bin/bash
+
+  dev-cuda:
+    image: ierturk/l4t-dev-cuda:latest
+    build:
+      context: .
+      dockerfile: l4t-dev-cuda.Dockerfile
     network_mode: host
     privileged: true
     user: ierturk
@@ -30,7 +39,6 @@ services:
     build:
       context: .
       dockerfile: l4t-dev-libs.Dockerfile
-    runtime: nvidia
     network_mode: host
     privileged: true
     user: ierturk
@@ -42,7 +50,7 @@ services:
     build:
       context: .
       dockerfile: l4t-dev-work.Dockerfile
-    runtime: nvidia
+    # runtime: nvidia
     volumes:
       - type: bind
         source: ../..
@@ -71,7 +79,7 @@ services:
       - 'c 13:* rmw'
       - 'c 199:* rmw'
       - 'c 226:* rmw'
-    runtime: nvidia
+    # runtime: nvidia
     environment:
       - WAYLAND_USER=ierturk
       - XDG_RUNTIME_DIR=/run/user/1000
