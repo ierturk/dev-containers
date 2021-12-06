@@ -12,6 +12,17 @@ services:
     working_dir: /workspace
     command: /bin/bash
 
+  weston:
+    image: ierturk/l4t-weston:latest
+    build:
+      context: .
+      dockerfile: l4t-weston.Dockerfile
+    network_mode: host
+    privileged: true
+    user: ierturk
+    working_dir: /workspace
+    command: /bin/bash
+
   dev-base:
     image: ierturk/l4t-dev-base:latest
     build:
