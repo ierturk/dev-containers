@@ -60,18 +60,6 @@ services:
     working_dir: /workspace
     command: /bin/bash
 
-  dev-ocv-build:
-    image: ierturk/l4t-ocv-build:latest
-    volumes:
-      - type: bind
-        source: ../..
-        target: /workspace
-    network_mode: host
-    privileged: true
-    user: ierturk
-    working_dir: /workspace
-    command: /bin/bash
-
   dev-work:
     image: ierturk/l4t-dev-work:latest
     build:

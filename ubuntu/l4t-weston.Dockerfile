@@ -25,9 +25,9 @@ RUN sudo groupadd -g 19 input && \
     sudo groupadd -g 988 render && \
     usermod -aG input,render ierturk
 
-COPY weston-entry.sh /usr/bin/entry.sh
-COPY weston.ini /etc/xdg/weston/weston.ini
-COPY weston-dev.ini /etc/xdg/weston-dev/weston.ini
+COPY assets/weston/weston-entry.sh /usr/bin/entry.sh
+COPY assets/weston/weston.ini /etc/xdg/weston/weston.ini
+COPY assets/weston/weston-dev.ini /etc/xdg/weston-dev/weston.ini
 
 # Set as default user
 USER ierturk

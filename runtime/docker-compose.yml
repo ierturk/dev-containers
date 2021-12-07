@@ -28,7 +28,8 @@ services:
       - 'c 13:* rmw'
       # ... for /dev/dri devices
       - 'c 226:* rmw'
-    command: --developer weston-launch --tty=/dev/tty7 --user=ierturk
+    # command: --developer weston-launch --tty=/dev/tty7 --user=ierturk
+    command: weston-launch --tty=/dev/tty7 --user=ierturk
     # command: /bin/bash
     runtime: nvidia
     network_mode: host
@@ -57,3 +58,63 @@ services:
         timeout: 4s
         retries: 6
         start_period: 10s
+
+  app:
+    image: ierturk/l4t-dev-ocv:latest
+    volumes:
+      - type: bind
+        source: /tmp
+        target: /tmp
+      - type: bind
+        source: /dev
+        target: /dev
+      - type: bind
+        source: /run/udev
+        target: /run/udev
+      - type: bind
+        source: /var/run/dbus
+        target: /var/run/dbus
+      - type: bind
+        source: ../..
+        target: /workspace
+      - type: bind
+        source: ~/.ssh
+        target: /home/ierturk/.ssh
+        read_only: true
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    # Add device access rights through cgroup...
+    device_cgroup_rules:
+      # ... for tty0
+      - 'c 4:0 rmw'
+      # ... for tty7
+      - 'c 4:7 rmw'
+      # ... for /dev/input devices
+      - 'c 13:* rmw'
+      # ... for /dev/dri devices
+      - 'c 226:* rmw'
+    # command: --developer weston-launch --tty=/dev/tty7 --user=ierturk
+    # command: /bin/bash
+    runtime: nvidia
+    network_mode: host
+    privileged: true
+    environment:
+      - WAYLAND_USER=ierturk
+      - XDG_RUNTIME_DIR=/run/user/1000
+      - WAYLAND_DISPLAY=wayland-0
+      - DISPLAY=:0
+      # - QT_QPA_PLATFORM=wayland
+      # - LIBGL_ALWAYS_INDIRECT=0
+      # - QT_QPA_PLATFORM=eglfs
+      # - QT_QPA_EGLFS_ALWAYS_SET_MODE=1
+      # - QT_LOGGING_RULES=qt.qpa.*=true
+      # - QT_LOGGING_RULES=qt.qpa.wayland.*=false
+      # - QT_QPA_EGLFS_INTEGRATION=eglfs_kms
+      # - QT_QPA_EGLFS_KMS_CONFIG=/workspace/kms.conf
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - OPENBLAS_CORETYPE=ARMV8
+    user: ierturk
+    working_dir: /workspace
+    depends_on:
+      - weston
