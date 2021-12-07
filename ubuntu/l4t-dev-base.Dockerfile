@@ -2,11 +2,9 @@
 # This is a Dockerfile for L4T-DEV-BASE
 #
 
-FROM ierturk/l4t-base:latest
+FROM ierturk/l4t-weston:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
-
-USER root
 
 #
 # Build tools

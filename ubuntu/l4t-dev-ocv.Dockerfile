@@ -20,9 +20,3 @@ RUN apt-get update && \
     && rm *.deb \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
-    
-# Set as default user
-USER ierturk
-WORKDIR /home/ierturk
-
-CMD ["bash"]

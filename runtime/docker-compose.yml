@@ -2,7 +2,7 @@ version: '2.4'
 
 services:
   weston:
-    image: ierturk/l4t-weston:latest
+    image: ierturk/l4t-dev-work:latest
     volumes:
       - type: bind
         source: /tmp
@@ -16,6 +16,9 @@ services:
       - type: bind
         source: /var/run/dbus
         target: /var/run/dbus
+      - type: bind
+        source: ../..
+        target: /workspace
     cap_add:
       - CAP_SYS_TTY_CONFIG
     # Add device access rights through cgroup...
@@ -28,9 +31,12 @@ services:
       - 'c 13:* rmw'
       # ... for /dev/dri devices
       - 'c 226:* rmw'
+      - 'c 81:* rmw'
+      - 'c 199:* rmw'
     # command: --developer weston-launch --tty=/dev/tty7 --user=ierturk
-    command: weston-launch --tty=/dev/tty7 --user=ierturk
+    # command: weston-launch --tty=/dev/tty7 --user=ierturk
     # command: /bin/bash
+    entrypoint: /usr/bin/entry.sh weston-launch --tty=/dev/tty7 --user=ierturk
     runtime: nvidia
     network_mode: host
     privileged: true
@@ -60,11 +66,14 @@ services:
         start_period: 10s
 
   app:
-    image: ierturk/l4t-dev-ocv:latest
+    image: ierturk/l4t-dev-work:latest
     volumes:
       - type: bind
         source: /tmp
         target: /tmp
+      - type: bind
+        source: /dev/dri
+        target: /dev/dri
       - type: bind
         source: /dev
         target: /dev
@@ -74,6 +83,9 @@ services:
       - type: bind
         source: /var/run/dbus
         target: /var/run/dbus
+      - type: bind
+        source: /run/user/1000
+        target: /run/user/1000
       - type: bind
         source: ../..
         target: /workspace
@@ -94,6 +106,7 @@ services:
       # ... for /dev/dri devices
       - 'c 226:* rmw'
     # command: --developer weston-launch --tty=/dev/tty7 --user=ierturk
+    entrypoint: /bin/bash
     # command: /bin/bash
     runtime: nvidia
     network_mode: host

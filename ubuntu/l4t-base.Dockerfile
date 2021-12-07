@@ -2,7 +2,7 @@
 # This is a Dockerfile for L4T-BASE
 #
 
-FROM ubuntu:bionic
+FROM ubuntu:impish
 
 ARG L4T_RELEASE_MAJOR=32.6
 ARG L4T_RELEASE_MINOR=1
@@ -37,12 +37,8 @@ RUN apt-get update && \
     apt-get clean
 
 RUN useradd -p 1nyv3S0bODNy2 -ms /bin/bash ierturk && \
-    usermod -aG sudo,video,dialout ierturk
+    groupadd -g 19 input && \
+    groupadd -g 988 render && \
+    usermod -aG sudo,video,dialout,input,render ierturk
 # New added for disable sudo password
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-# Set as default user
-USER ierturk
-WORKDIR /home/ierturk
-
-CMD ["bash"]

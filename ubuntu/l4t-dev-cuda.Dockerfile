@@ -17,9 +17,3 @@ RUN apt-get update && \
     cuda-toolkit-10-2 nvidia-cudnn8 && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
-
-# Set as default user
-USER ierturk
-WORKDIR /home/ierturk
-
-CMD ["bash"]
