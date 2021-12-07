@@ -45,11 +45,27 @@ services:
     working_dir: /workspace
     command: /bin/bash
 
-  dev-libs:
-    image: ierturk/l4t-dev-libs:latest
+  dev-ocv:
+    image: ierturk/l4t-dev-ocv:latest
     build:
       context: .
-      dockerfile: l4t-dev-libs.Dockerfile
+      dockerfile: l4t-dev-ocv.Dockerfile
+    volumes:
+      - type: bind
+        source: ../..
+        target: /workspace
+    network_mode: host
+    privileged: true
+    user: ierturk
+    working_dir: /workspace
+    command: /bin/bash
+
+  dev-ocv-build:
+    image: ierturk/l4t-ocv-build:latest
+    volumes:
+      - type: bind
+        source: ../..
+        target: /workspace
     network_mode: host
     privileged: true
     user: ierturk

@@ -28,7 +28,7 @@ services:
       - 'c 13:* rmw'
       # ... for /dev/dri devices
       - 'c 226:* rmw'
-    command: weston-launch --tty=/dev/tty7 --user=ierturk
+    command: --developer weston-launch --tty=/dev/tty7 --user=ierturk
     # command: /bin/bash
     runtime: nvidia
     network_mode: host
