@@ -68,22 +68,12 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
     gstreamer1.0-gtk3 \
     gstreamer1.0-qt5 \
     gstreamer1.0-pulseaudio \
+    qt*-examples \
+    qtdeclarative5-dev \
+    pyqt5-dev \
+    pyqt5-dev-tools \
+    nodejs \
+    netdata-plugins-nodejs \
     && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    qt*-examples && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    qtdeclarative5-dev && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean
-
-# RUN sudo groupadd -g 19 input && \
-#     sudo groupadd -g 988 render && \
-#     usermod -aG input,render ierturk
 
 RUN usermod -aG input,video,render,dialout ierturk
