@@ -3,7 +3,7 @@
 # on Jetson Dev Kits
 #
 
-FROM ierturk/l4t-work:20211202
+FROM ierturk/l4t-work:latest
 
 USER root
 

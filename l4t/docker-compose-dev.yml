@@ -84,6 +84,10 @@ services:
       - type: bind
         source: ../..
         target: /workspace
+      - type: bind
+        source: ~/.ssh
+        target: /home/ierturk/.ssh
+        read_only: true
     network_mode: host
     privileged: true
     user: ierturk
