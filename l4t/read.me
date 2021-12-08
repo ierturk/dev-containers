@@ -1,0 +1,133 @@
+../qt-everywhere-src-5.15.2/configure -kms -eglfs -opengl es2 -prefix /usr/local/qt5jnano -opensource -confirm-license -skip qtscript -skip qtwebengine -force-debug-info -skip qtlocation -nomake examples -make libs -pkg-config -no-use-gold-linker -v
+
+sudo apt install libvulkan-dev
+sudo apt install libnvidia-egl-wayland-dev libgegl-dev
+sudo apt install libgbm-dev
+sudo apt install libglu1-mesa-dev libxrender-dev libdrm-dev
+sudo apt-get install libudev-dev libinput-dev libts-dev
+    libgstreamer1.0-0 \
+    gstreamer1.0-plugins-base \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-ugly \
+    gstreamer1.0-libav \
+    gstreamer1.0-doc \
+    gstreamer1.0-tools \
+    gstreamer1.0-x \
+    gstreamer1.0-alsa \
+    gstreamer1.0-gl \
+    gstreamer1.0-gtk3 \
+    gstreamer1.0-qt5 \
+    gstreamer1.0-pulseaudio
+
+-skip wayland
+
+
+
+# qtcam dev
+sudo apt-get install 
+libv4l-dev
+libavcodec-dev
+libavformat-dev
+libavutil-dev
+libswscale-dev
+libavresample-dev
+libudev-dev
+libavcodec-extra
+qt5-default
+qtdeclarative5-dev
+freeglut3
+freeglut3-dev
+libjpeg-turbo8-dev
+libusb-1.0-0-dev
+libusb-dev
+libevdev-dev
+libpulse-dev
+qtmultimedia5-dev
+qtdeclarative5-window-plugin
+qml-module-qtquick-controls
+qml-module-qtquick-dialogs
+qml-module-qtquick-extras
+qml-module-qtquick-privatewidgets
+qtdeclarative5-qtquick2-plugin
+libasound2-dev
+libturbojpeg0-dev
+qtquickcontrols5-doc
+lsb-release
+
+
+cmake \
+        -D CPACK_BINARY_DEB=ON \
+        -D BUILD_EXAMPLES=OFF \
+        -D BUILD_opencv_python2=OFF \
+        -D BUILD_opencv_python3=ON \
+        -D BUILD_opencv_java=OFF \
+        -D CMAKE_BUILD_TYPE=RELEASE \
+        -D CMAKE_INSTALL_PREFIX=/usr/local \
+        -D CUDA_ARCH_BIN=5.3 \
+        -D CUDA_ARCH_PTX= \
+        -D CUDA_FAST_MATH=ON \
+        -D CUDNN_INCLUDE_DIR=/usr/include \
+        -D EIGEN_INCLUDE_PATH=/usr/include/eigen3 \
+        -D WITH_EIGEN=ON \
+        -D ENABLE_NEON=ON \
+        -D OPENCV_DNN_CUDA=ON \
+        -D OPENCV_ENABLE_NONFREE=ON \
+        -D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules \
+        -D OPENCV_GENERATE_PKGCONFIG=ON \
+        -D WITH_CUBLAS=ON \
+        -D WITH_CUDA=ON \
+        -D WITH_CUDNN=ON \
+        -D WITH_GSTREAMER=ON \
+        -D WITH_LIBV4L=ON \
+        -D WITH_OPENCL=OFF \
+        -D WITH_IPP=OFF \
+        -D WITH_TBB=ON \
+        -D BUILD_TIFF=ON \
+        -D BUILD_PERF_TESTS=OFF \
+        -D BUILD_TESTS=OFF \
+        ../opencv
+
+
+gst-launch-1.0 -v v4l2src device=/dev/video0 ! image/jpeg, width=1920, height=1080, framerate=30/1, format=MJPG ! jpegdec ! autovideosink
+
+qtmultimedia5-examples \
+qtquickcontrols2-5-examples \
+qtquickcontrols5-examples \
+qtvirtualkeyboard5-examples \
+qtwayland5-examples \
+qml-module-qtquick-controls2 \
+libv4l-dev \
+libavcodec-dev \
+libavformat-dev \
+libavutil-dev \
+libswscale-dev \
+libavresample-dev \
+libudev-dev \
+libavcodec-extra \
+qt5-default \
+qtdeclarative5-dev \
+freeglut3 \
+freeglut3-dev \
+libjpeg-turbo8-dev \
+libusb-1.0-0-dev \
+libusb-dev \
+libevdev-dev \
+libpulse-dev \
+qtmultimedia5-dev \
+qtdeclarative5-window-plugin \
+qml-module-qtquick-controls \
+qml-module-qtquick-dialogs \
+qml-module-qtquick-extras \
+qml-module-qtquick-privatewidgets \
+qtdeclarative5-qtquick2-plugin \
+libasound2-dev \
+libturbojpeg0-dev \
+qtquickcontrols5-doc \
+lsb-release \
+
+
+# libqt5multimedia5-plugins
+
+qml-module-qtquick-controls2
+gstreamer1.0-qt5
