@@ -6,157 +6,45 @@ services:
     build:
       context: .
       dockerfile: l4t-base.Dockerfile
-    network_mode: host
-    privileged: true
-    user: ierturk
-    working_dir: /workspace
-    command: /bin/bash
 
   weston:
     image: ierturk/l4t-weston:latest
     build:
       context: .
       dockerfile: l4t-weston.Dockerfile
-    network_mode: host
-    privileged: true
-    user: ierturk
-    working_dir: /workspace
-    command: /bin/bash
 
   dev-base:
     image: ierturk/l4t-dev-base:latest
     build:
       context: .
       dockerfile: l4t-dev-base.Dockerfile
-    network_mode: host
-    privileged: true
-    user: ierturk
-    working_dir: /workspace
-    command: /bin/bash
 
   dev-cuda:
     image: ierturk/l4t-dev-cuda:latest
     build:
       context: .
       dockerfile: l4t-dev-cuda.Dockerfile
-    network_mode: host
-    privileged: true
-    user: ierturk
-    working_dir: /workspace
-    command: /bin/bash
 
   dev-libs:
     image: ierturk/l4t-dev-libs:latest
     build:
       context: .
       dockerfile: l4t-dev-libs.Dockerfile
-    volumes:
-      - type: bind
-        source: ../..
-        target: /workspace
-    network_mode: host
-    privileged: true
-    user: ierturk
-    working_dir: /workspace
-    command: /bin/bash
 
   dev-ocv:
     image: ierturk/l4t-dev-ocv:latest
     build:
       context: .
       dockerfile: l4t-dev-ocv.Dockerfile
-    volumes:
-      - type: bind
-        source: ../..
-        target: /workspace
-    network_mode: host
-    privileged: true
-    user: ierturk
-    working_dir: /workspace
-    command: /bin/bash
 
   dev-work:
     image: ierturk/l4t-dev-work:latest
     build:
       context: .
       dockerfile: l4t-dev-work.Dockerfile
-    volumes:
-      - type: bind
-        source: ../..
-        target: /workspace
-      - type: bind
-        source: ~/.ssh
-        target: /home/ierturk/.ssh
-        read_only: true
-    network_mode: host
-    privileged: true
-    user: ierturk
-    working_dir: /workspace
-    command: /bin/bash
 
   work:
     image: ierturk/l4t-work:latest
-    security_opt:
-      - seccomp:unconfined
-    shm_size: 256mb
-    cap_add:
-      - CAP_SYS_TTY_CONFIG
-      # - SYS_PTRACE
-    device_cgroup_rules:
-      - 'c 4:0 rmw'
-      - 'c 4:7 rmw'
-      - 'c 81:* rmw'
-      - 'c 13:* rmw'
-      - 'c 199:* rmw'
-      - 'c 226:* rmw'
-    # runtime: nvidia
-    environment:
-      - WAYLAND_USER=ierturk
-      - XDG_RUNTIME_DIR=/run/user/1000
-      - WAYLAND_DISPLAY=wayland-0
-      - DISPLAY=:0
-      - QT_QPA_PLATFORM=wayland
-      # - LIBGL_ALWAYS_INDIRECT=0
-      # - QT_QPA_PLATFORM=eglfs
-      # - QT_QPA_EGLFS_ALWAYS_SET_MODE=1
-      - QT_LOGGING_RULES=qt.qpa.*=true
-      - QT_LOGGING_RULES=qt.qpa.wayland.*=false
-      # - QT_QPA_EGLFS_INTEGRATION=eglfs_kms
-      - QT_QPA_EGLFS_KMS_CONFIG=/workspace/kms.conf
-    volumes:
-      - type: bind
-        source: /tmp/.X11-unix
-        target: /tmp/.X11-unix
-      - type: bind
-        source: /var/run/dbus
-        target: /var/run/dbus
-      - type: bind
-        source: /dev/dri
-        target: /dev/dri
-      - type: bind
-        source: /run/user/1000
-        target: /run/user/1000
-      - type: bind
-        source: /run/udev
-        target: /run/udev
-        read_only: true
-      - type: bind
-        source: /dev/video0
-        target: /dev/video0
-      - type: bind
-        source: /dev/input
-        target: /dev/input
-      - type: bind
-        source: ../..
-        target: /workspace
-      - type: bind
-        source: /usr/include
-        target: /workspace/cudnn_header
-      - ~/.ssh:/home/ierturk/.ssh:ro
-    network_mode: host
-    # ports:
-    #   - 22:2222
-    privileged: true
-    user: ierturk
-    working_dir: /workspace
-    command: /bin/bash
+    build:
+      context: .
+      dockerfile: l4t-work.Dockerfile

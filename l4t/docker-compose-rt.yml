@@ -1,12 +1,18 @@
-version: '2.4'
+version: '2.3'
 
 services:
   weston:
-    image: ierturk/l4t-dev-work:latest
+    image: ierturk/l4t-weston:latest
+    security_opt:
+      - seccomp:unconfined
+    shm_size: '256mb'
     volumes:
       - type: bind
         source: /tmp
         target: /tmp
+      - type: bind
+        source: /dev/dri
+        target: /dev/dri
       - type: bind
         source: /dev
         target: /dev
@@ -17,10 +23,18 @@ services:
         source: /var/run/dbus
         target: /var/run/dbus
       - type: bind
+        source: /run/user/1000
+        target: /run/user/1000
+      - type: bind
         source: ../..
         target: /workspace
+      - type: bind
+        source: ~/.ssh
+        target: /home/ierturk/.ssh
+        read_only: true
     cap_add:
       - CAP_SYS_TTY_CONFIG
+      - SYS_PTRACE
     # Add device access rights through cgroup...
     device_cgroup_rules:
       # ... for tty0
@@ -66,7 +80,10 @@ services:
     #     start_period: 10s
 
   app:
-    image: ierturk/l4t-dev-work:latest
+    image: ierturk/l4t-app:latest
+    security_opt:
+      - seccomp:unconfined
+    shm_size: '256mb'
     volumes:
       - type: bind
         source: /tmp
@@ -95,6 +112,7 @@ services:
         read_only: true
     cap_add:
       - CAP_SYS_TTY_CONFIG
+      - SYS_PTRACE
     # Add device access rights through cgroup...
     device_cgroup_rules:
       # ... for tty0
@@ -105,9 +123,9 @@ services:
       - 'c 13:* rmw'
       # ... for /dev/dri devices
       - 'c 226:* rmw'
-    # command: --developer weston-launch --tty=/dev/tty7 --user=ierturk
-    entrypoint: /bin/bash
-    # command: /bin/bash
+      - 'c 81:* rmw'
+      - 'c 199:* rmw'
+    entrypoint: /usr/sbin/sshd -p 2222 -D
     runtime: nvidia
     network_mode: host
     privileged: true
@@ -116,7 +134,7 @@ services:
       - XDG_RUNTIME_DIR=/run/user/1000
       - WAYLAND_DISPLAY=wayland-0
       - DISPLAY=:0
-      # - QT_QPA_PLATFORM=wayland
+      - QT_QPA_PLATFORM=wayland
       # - LIBGL_ALWAYS_INDIRECT=0
       # - QT_QPA_PLATFORM=eglfs
       # - QT_QPA_EGLFS_ALWAYS_SET_MODE=1
@@ -127,7 +145,7 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
       - OPENBLAS_CORETYPE=ARMV8
-    user: ierturk
+    user: root
     working_dir: /workspace
     depends_on:
       - weston

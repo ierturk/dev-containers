@@ -3,24 +3,28 @@
 # on Jetson Dev Kits
 #
 
-FROM ierturk/l4t-work:latest
+FROM ierturk/l4t-dev-work:latest
 
-USER root
+RUN apt-get -y update && apt-get -y upgrade \
+    && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    openssh-server gdb && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean
+RUN usermod -aG input,video,render,dialout ierturk
 
-RUN echo 'ierturk:pass' | chpasswd && \
-    service ssh start
+ENV WAYLAND_USER=ierturk
+ENV XDG_RUNTIME_DIR=/run/user/1000
+ENV WAYLAND_DISPLAY=wayland-0
+ENV DISPLAY=:0
+# QT_QPA_PLATFORM=wayland
+# - LIBGL_ALWAYS_INDIRECT=0
+# - QT_QPA_PLATFORM=eglfs
+# - QT_QPA_EGLFS_ALWAYS_SET_MODE=1
+# - QT_LOGGING_RULES=qt.qpa.*=true
+# - QT_LOGGING_RULES=qt.qpa.wayland.*=false
+# - QT_QPA_EGLFS_INTEGRATION=eglfs_kms
+# - QT_QPA_EGLFS_KMS_CONFIG=/workspace/kms.conf
+ENV NVIDIA_VISIBLE_DEVICES=all
+ENV NVIDIA_DRIVER_CAPABILITIES=all
+ENV OPENBLAS_CORETYPE=ARMV8
 
-# CMD ["/usr/sbin/sshd", "-p", "2222", "-D"]
-
-# Set as default user
-USER ierturk
-WORKDIR /home/ierturk
-
-CMD ["bash"]
+RUN ssh-keygen -A && mkdir -p /run/sshd
 
