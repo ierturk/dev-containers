@@ -80,5 +80,8 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
     flex \
     bison \
     python-is-python3 \
+    libfmt-dev \
+    libqt5serialport5-dev \
+    libzbar-dev \
     && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 

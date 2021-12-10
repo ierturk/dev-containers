@@ -6,6 +6,8 @@ services:
     security_opt:
       - seccomp:unconfined
     shm_size: '256mb'
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     volumes:
       - type: bind
         source: /tmp
@@ -50,7 +52,9 @@ services:
     # command: --developer weston-launch --tty=/dev/tty7 --user=ierturk
     # command: weston-launch --tty=/dev/tty7 --user=ierturk
     # command: /bin/bash
-    entrypoint: /usr/bin/entry.sh weston-launch --tty=/dev/tty7 --user=ierturk
+    entrypoint: /usr/bin/entry.sh --developer weston-launch --tty=/dev/tty7 --user=ierturk
+    # entrypoint: /bin/bash
+    # entrypoint: /usr/lib/aarch64-linux-gnu/qt5/examples/wayland/pure-qml/pure-qml -platform eglfs
     runtime: nvidia
     network_mode: host
     privileged: true
@@ -60,16 +64,19 @@ services:
       - WAYLAND_DISPLAY=wayland-0
       - DISPLAY=:0
       - QT_QPA_PLATFORM=wayland
+      - QT_IM_MODULE=qtvirtualkeyboard
       # - LIBGL_ALWAYS_INDIRECT=0
       # - QT_QPA_PLATFORM=eglfs
       # - QT_QPA_EGLFS_ALWAYS_SET_MODE=1
       # - QT_LOGGING_RULES=qt.qpa.*=true
       # - QT_LOGGING_RULES=qt.qpa.wayland.*=false
-      # - QT_QPA_EGLFS_INTEGRATION=eglfs_kms
-      # - QT_QPA_EGLFS_KMS_CONFIG=/workspace/kms.conf
+      - QT_QPA_EGLFS_INTEGRATION=eglfs_kms
+      - QT_QPA_EGLFS_KMS_CONFIG=/workspace/kms.conf
+      - QT_QPA_EGLFS_KMS_ATOMIC=1
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
       - OPENBLAS_CORETYPE=ARMV8
+      - IGNORE_X_LOCKS=1
     user: root
     working_dir: /workspace
     # healthcheck:
@@ -135,13 +142,15 @@ services:
       - WAYLAND_DISPLAY=wayland-0
       - DISPLAY=:0
       - QT_QPA_PLATFORM=wayland
+      # - QT_IM_MODULE=qtvirtualkeyboard
       # - LIBGL_ALWAYS_INDIRECT=0
-      # - QT_QPA_PLATFORM=eglfs
+      # - QT_QPA_PLATFORM=eglf
       # - QT_QPA_EGLFS_ALWAYS_SET_MODE=1
       # - QT_LOGGING_RULES=qt.qpa.*=true
       # - QT_LOGGING_RULES=qt.qpa.wayland.*=false
-      # - QT_QPA_EGLFS_INTEGRATION=eglfs_kms
-      # - QT_QPA_EGLFS_KMS_CONFIG=/workspace/kms.conf
+      - QT_QPA_EGLFS_INTEGRATION=eglfs_kms
+      - QT_QPA_EGLFS_KMS_CONFIG=/workspace/kms.conf
+      - QT_QPA_EGLFS_KMS_ATOMIC=1
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
       - OPENBLAS_CORETYPE=ARMV8

@@ -6,6 +6,8 @@
 FROM ierturk/l4t-dev-work:latest
 
 RUN apt-get -y update && apt-get -y upgrade \
+    && apt-get install -y --no-install-recommends \
+        zbarcam-qt \
     && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 RUN usermod -aG input,video,render,dialout ierturk
