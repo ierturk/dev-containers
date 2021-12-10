@@ -1,42 +1,20 @@
-version: '2.3'
+version: '2.4'
 
 services:
-  weston:
-    image: ierturk/l4t-weston:latest
-    security_opt:
-      - seccomp:unconfined
-    shm_size: '256mb'
-    # stdin_open: true # docker run -i
-    # tty: true        # docker run -t
+  wayland:
+    image: ierturk/l4t-wayland:latest
     volumes:
       - type: bind
         source: /tmp
         target: /tmp
-      - type: bind
-        source: /dev/dri
-        target: /dev/dri
       - type: bind
         source: /dev
         target: /dev
       - type: bind
         source: /run/udev
         target: /run/udev
-      - type: bind
-        source: /var/run/dbus
-        target: /var/run/dbus
-      - type: bind
-        source: /run/user/1000
-        target: /run/user/1000
-      - type: bind
-        source: ../..
-        target: /workspace
-      - type: bind
-        source: ~/.ssh
-        target: /home/ierturk/.ssh
-        read_only: true
     cap_add:
       - CAP_SYS_TTY_CONFIG
-      - SYS_PTRACE
     # Add device access rights through cgroup...
     device_cgroup_rules:
       # ... for tty0
@@ -45,41 +23,19 @@ services:
       - 'c 4:7 rmw'
       # ... for /dev/input devices
       - 'c 13:* rmw'
+      - 'c 199:* rmw'
       # ... for /dev/dri devices
       - 'c 226:* rmw'
       - 'c 81:* rmw'
-      - 'c 199:* rmw'
-    # command: --developer weston-launch --tty=/dev/tty7 --user=ierturk
-    # command: weston-launch --tty=/dev/tty7 --user=ierturk
-    # command: /bin/bash
-    # entrypoint: /usr/lib/aarch64-linux-gnu/qt5/examples/wayland/pure-qml/pure-qml -platform eglfs
-    entrypoint: /usr/bin/entry.sh --developer weston-launch --tty=/dev/tty7 --user=ierturk
-    # entrypoint: /bin/bash
-    # entrypoint: /usr/lib/aarch64-linux-gnu/qt5/examples/wayland/pure-qml/pure-qml -platform eglfs
+    # entrypoint: /usr/bin/entry.sh --developer weston-launch --tty=/dev/tty7 --user=ierturk
+    entrypoint: /usr/bin//entry.sh /usr/lib/aarch64-linux-gnu/qt5/examples/wayland/pure-qml/pure-qml -platform eglfs
     runtime: nvidia
     network_mode: host
-    privileged: true
     environment:
-      - WAYLAND_USER=ierturk
-      - XDG_RUNTIME_DIR=/run/user/1000
-      - WAYLAND_DISPLAY=wayland-0
-      - DISPLAY=:0
-      - QT_QPA_PLATFORM=eglfs
-      - QT_IM_MODULE=qtvirtualkeyboard
-      # - LIBGL_ALWAYS_INDIRECT=0
-      # - QT_QPA_PLATFORM=eglfs
-      # - QT_QPA_EGLFS_ALWAYS_SET_MODE=1
-      # - QT_LOGGING_RULES=qt.qpa.*=true
-      # - QT_LOGGING_RULES=qt.qpa.wayland.*=false
-      - QT_QPA_EGLFS_INTEGRATION=eglfs_kms
-      - QT_QPA_EGLFS_KMS_CONFIG=/workspace/kms.conf
-      - QT_QPA_EGLFS_KMS_ATOMIC=1
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
-      - OPENBLAS_CORETYPE=ARMV8
       - IGNORE_X_LOCKS=1
-    user: root
-    working_dir: /workspace
+    user: ierturk
     # healthcheck:
     #     test: ["CMD", "test", "-S", "/tmp/.X11-unix/X0"]
     #     interval: 5s
@@ -88,7 +44,7 @@ services:
     #     start_period: 10s
 
   app:
-    image: ierturk/l4t-work:latest
+    image: ierturk/l4t-app:latest
     security_opt:
       - seccomp:unconfined
     shm_size: '256mb'
@@ -97,20 +53,14 @@ services:
         source: /tmp
         target: /tmp
       - type: bind
-        source: /dev/dri
-        target: /dev/dri
-      - type: bind
         source: /dev
         target: /dev
       - type: bind
         source: /run/udev
         target: /run/udev
       - type: bind
-        source: /var/run/dbus
-        target: /var/run/dbus
-      - type: bind
-        source: /run/user/1000
-        target: /run/user/1000
+        source: /tmp/1000-runtime-dir
+        target: /tmp/1000-runtime-dir
       - type: bind
         source: ../..
         target: /workspace
@@ -118,7 +68,7 @@ services:
         source: ~/.ssh
         target: /home/ierturk/.ssh
         read_only: true
-    cap_add:
+    # cap_add:
       - CAP_SYS_TTY_CONFIG
       - SYS_PTRACE
     # Add device access rights through cgroup...
@@ -129,33 +79,23 @@ services:
       - 'c 4:7 rmw'
       # ... for /dev/input devices
       - 'c 13:* rmw'
+      - 'c 199:* rmw'
       # ... for /dev/dri devices
       - 'c 226:* rmw'
       - 'c 81:* rmw'
-      - 'c 199:* rmw'
     entrypoint: /usr/sbin/sshd -p 2222 -D
     runtime: nvidia
     network_mode: host
     privileged: true
     environment:
       - WAYLAND_USER=ierturk
-      - XDG_RUNTIME_DIR=/run/user/1000
+      - XDG_RUNTIME_DIR=/tmp/1000-runtime-dir
       - WAYLAND_DISPLAY=wayland-0
       - DISPLAY=:0
-      - QT_QPA_PLATFORM=eglfs
-      # - QT_IM_MODULE=qtvirtualkeyboard
-      # - LIBGL_ALWAYS_INDIRECT=0
-      # - QT_QPA_PLATFORM=eglf
-      # - QT_QPA_EGLFS_ALWAYS_SET_MODE=1
-      # - QT_LOGGING_RULES=qt.qpa.*=true
-      # - QT_LOGGING_RULES=qt.qpa.wayland.*=false
-      - QT_QPA_EGLFS_INTEGRATION=eglfs_kms
-      - QT_QPA_EGLFS_KMS_CONFIG=/workspace/kms.conf
-      - QT_QPA_EGLFS_KMS_ATOMIC=1
+      - QT_QPA_PLATFORM=wayland
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
-      - OPENBLAS_CORETYPE=ARMV8
     user: root
     working_dir: /workspace
     depends_on:
-      - weston
+      - wayland

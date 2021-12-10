@@ -7,11 +7,11 @@ services:
       context: .
       dockerfile: l4t-base.Dockerfile
 
-  weston:
-    image: ierturk/l4t-weston:latest
+  wayland:
+    image: ierturk/l4t-wayland:latest
     build:
       context: .
-      dockerfile: l4t-weston.Dockerfile
+      dockerfile: l4t-wayland.Dockerfile
 
   dev-base:
     image: ierturk/l4t-dev-base:latest
