@@ -6,8 +6,8 @@ services:
     security_opt:
       - seccomp:unconfined
     shm_size: '256mb'
-    stdin_open: true # docker run -i
-    tty: true        # docker run -t
+    # stdin_open: true # docker run -i
+    # tty: true        # docker run -t
     volumes:
       - type: bind
         source: /tmp
@@ -52,6 +52,7 @@ services:
     # command: --developer weston-launch --tty=/dev/tty7 --user=ierturk
     # command: weston-launch --tty=/dev/tty7 --user=ierturk
     # command: /bin/bash
+    # entrypoint: /usr/lib/aarch64-linux-gnu/qt5/examples/wayland/pure-qml/pure-qml -platform eglfs
     entrypoint: /usr/bin/entry.sh --developer weston-launch --tty=/dev/tty7 --user=ierturk
     # entrypoint: /bin/bash
     # entrypoint: /usr/lib/aarch64-linux-gnu/qt5/examples/wayland/pure-qml/pure-qml -platform eglfs
@@ -63,7 +64,7 @@ services:
       - XDG_RUNTIME_DIR=/run/user/1000
       - WAYLAND_DISPLAY=wayland-0
       - DISPLAY=:0
-      - QT_QPA_PLATFORM=wayland
+      - QT_QPA_PLATFORM=eglfs
       - QT_IM_MODULE=qtvirtualkeyboard
       # - LIBGL_ALWAYS_INDIRECT=0
       # - QT_QPA_PLATFORM=eglfs
@@ -87,7 +88,7 @@ services:
     #     start_period: 10s
 
   app:
-    image: ierturk/l4t-app:latest
+    image: ierturk/l4t-work:latest
     security_opt:
       - seccomp:unconfined
     shm_size: '256mb'
@@ -141,7 +142,7 @@ services:
       - XDG_RUNTIME_DIR=/run/user/1000
       - WAYLAND_DISPLAY=wayland-0
       - DISPLAY=:0
-      - QT_QPA_PLATFORM=wayland
+      - QT_QPA_PLATFORM=eglfs
       # - QT_IM_MODULE=qtvirtualkeyboard
       # - LIBGL_ALWAYS_INDIRECT=0
       # - QT_QPA_PLATFORM=eglf
