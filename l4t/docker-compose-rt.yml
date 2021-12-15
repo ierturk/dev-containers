@@ -96,6 +96,7 @@ services:
       - QT_QPA_PLATFORM=wayland
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
+      - ORT_TENSORRT_FP16_ENABLE=1
     user: root
     working_dir: /workspace
     depends_on:
