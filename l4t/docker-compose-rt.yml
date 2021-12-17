@@ -39,6 +39,7 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
       - IGNORE_X_LOCKS=1
+      - QT_IM_MODULE=qtvirtualkeyboard
     user: ierturk
     # healthcheck:
     #     test: ["CMD", "test", "-S", "/tmp/.X11-unix/X0"]
