@@ -1,0 +1,20 @@
+version: '2.4'
+
+services:
+  base:
+    image: ierturk/debian-base:latest
+    build:
+      context: .
+      dockerfile: debian-base.Dockerfile
+
+  dev-base:
+    image: ierturk/debian-dev-base:latest
+    build:
+      context: .
+      dockerfile: debian-dev-base.Dockerfile
+
+  dev-qt:
+    image: ierturk/debian-dev-qt:latest
+    build:
+      context: .
+      dockerfile: debian-dev-qt.Dockerfile

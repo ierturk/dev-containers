@@ -1,0 +1,55 @@
+version: '2.4'
+
+services:
+  app:
+    image: ierturk/debian-dev-qt:latest
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined 
+    shm_size: '256mb'
+    volumes:
+      - type: bind
+        source: /tmp
+        target: /tmp
+      - type: bind
+        source: /dev
+        target: /dev
+      - type: bind
+        source: /run/udev
+        target: /run/udev
+      - type: bind
+        source: /run/user/1000
+        target: /run/user/1000
+      - type: bind
+        source: ../..
+        target: /workspace
+      - type: bind
+        source: ~/.ssh
+        target: /home/ierturk/.ssh
+        read_only: true
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+      - SYS_PTRACE
+    # Add device access rights through cgroup...
+    device_cgroup_rules:
+      # ... for tty0
+      - 'c 4:0 rmw'
+      # ... for tty7
+      - 'c 4:7 rmw'
+      # ... for /dev/input devices
+      - 'c 13:* rmw'
+      - 'c 199:* rmw'
+      # ... for /dev/dri devices
+      - 'c 226:* rmw'
+      - 'c 81:* rmw'
+    entrypoint: /usr/sbin/sshd -p 2222 -D
+    network_mode: host
+    privileged: true
+    environment:
+      - WAYLAND_USER=ierturk
+      - XDG_RUNTIME_DIR=/run/user/1000
+      - WAYLAND_DISPLAY=wayland-0
+      - DISPLAY=:0
+      - QT_QPA_PLATFORM=wayland
+    user: root
+    working_dir: /workspace
