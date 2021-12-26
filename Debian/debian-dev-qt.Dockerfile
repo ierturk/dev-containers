@@ -2,25 +2,33 @@
 # This is a Dockerfile for DEBIAN-DEV-BASE
 #
 
-FROM ierturk/debian-base:latest
+FROM ierturk/debian-dev-base:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 #
-# Build tools
+# Qt Tools
 #
 
-COPY script-library/meta.env /usr/local/etc/vscode-dev-containers
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install \
+    qtcreator \
     qtbase5-dev \
+    qt*-dev-tools \
+    qt*-examples \
+    qt*-doc-html \
+    qml-module-qt* \
     qtwayland5-dev-tools \
-    qtquickcontrols2-5-dev \
     qtwayland5 \
-    qtdeclarative5-examples \
-    qtwayland5-examples \
-    qtquickcontrols5-examples \
-    qtquickcontrols2-5-examples \
+    qtmultimedia5-dev \
+    qtdeclarative5-dev \
+    qtquickcontrols2-5-dev \
+    libopencv-core-dev \
+    libopencv-contrib-dev \
+    libopencv-*-dev \
+    libfmt-dev \
+    gstreamer1.0-plugins-good \
+    v4l-utils \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 RUN ssh-keygen -A && mkdir -p /run/sshd

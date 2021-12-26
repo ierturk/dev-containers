@@ -1,8 +1,8 @@
 version: '2.4'
 
 services:
-  app:
-    image: ierturk/debian-dev-qt:latest
+  work:
+    image: ierturk/debian-work-qt:latest
     security_opt:
       - seccomp:unconfined
       - apparmor:unconfined 

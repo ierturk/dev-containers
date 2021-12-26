@@ -2,7 +2,7 @@
 The repo has a lot of docker containers for development.
 ___
 ## Repos and the Docs ##
-| No | Repo                                     | Repo URL      | Dökümantasyon URL     |
+| No | Repo                                     | Repo URL      | Documentation URL     |
 | :---: | :---                                  | :---:         | :---:                 |
 | 1     | L4T Development Containers            | [Repo][1]     | [Docs][2]             |
 
