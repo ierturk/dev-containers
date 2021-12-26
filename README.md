@@ -1,6 +1,5 @@
 # Development Containers #
 The repo has a lot of docker containers for development.
-. 
 ___
 ## Repos and the Docs ##
 | No | Repo                                     | Repo URL      | Dökümantasyon URL     |
