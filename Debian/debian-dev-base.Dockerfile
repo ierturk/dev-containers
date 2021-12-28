@@ -25,5 +25,3 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     flex \
     bison \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
-
-RUN ssh-keygen -A && mkdir -p /run/sshd

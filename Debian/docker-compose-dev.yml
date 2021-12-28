@@ -18,3 +18,9 @@ services:
     build:
       context: .
       dockerfile: debian-dev-qt.Dockerfile
+
+  dev-work:
+    image: ierturk/debian-dev-work:latest
+    build:
+      context: .
+      dockerfile: debian-dev-work.Dockerfile
