@@ -14,3 +14,5 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends openssh-server && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
+
+RUN ssh-keygen -A && mkdir -p /run/sshd
