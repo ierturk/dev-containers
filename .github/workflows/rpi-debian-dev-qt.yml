@@ -1,8 +1,10 @@
-name: Debian Base
+name: Debian Dev Qt
 
 on:
-  push:
-    branches: master
+  workflow_run:
+    workflows: [Debian Dev Base]
+    types:
+      - completed
 
 jobs:
   main:
@@ -29,11 +31,11 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./Debian
-          file: ./Debian/debian-base.Dockerfile
+          file: ./Debian/debian-dev-qt.Dockerfile
           platforms: linux/amd64, linux/arm64, linux/arm/v7
           push: true
-          tags: ierturk/debian-base:latest
-          cache-from: type=registry,ref=ierturk/debian-base:latest
+          tags: ierturk/debian-dev-qt:latest
+          cache-from: type=registry,ref=ierturk/debian-dev-qt:latest
           cache-to: type=inline
       -
         name: Image digest

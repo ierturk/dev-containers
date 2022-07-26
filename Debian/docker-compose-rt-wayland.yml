@@ -1,0 +1,104 @@
+version: '2.4'
+
+services:
+  wayland:
+    image: ierturk/debian-wayland:latest
+    volumes:
+      - type: bind
+        source: /tmp
+        target: /tmp
+      - type: bind
+        source: /dev
+        target: /dev
+      - type: bind
+        source: /run/udev
+        target: /run/udev
+      - type: bind
+        source: ../..
+        target: /workspace
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    # Add device access rights through cgroup...
+    device_cgroup_rules:
+      # ... for tty0
+      - 'c 4:0 rmw'
+      # ... for tty7
+      - 'c 4:7 rmw'
+      # ... for /dev/input devices
+      - 'c 13:* rmw'
+      - 'c 199:* rmw'
+      # ... for /dev/dri devices
+      - 'c 226:* rmw'
+      - 'c 81:* rmw'
+    # entrypoint: /usr/bin/entry.sh weston-launch --tty=/dev/tty7 --user=ierturk
+    # entrypoint: /usr/bin/entry.sh --developer weston-launch --tty=/dev/tty7 --user=ierturk
+    entrypoint: /usr/bin//entry.sh /workspace/shopper-jetson/build/Sources/External/swc/swc -platform eglfs
+    network_mode: host
+    environment:
+      - IGNORE_X_LOCKS=1
+      - QT_IM_MODULE=qtvirtualkeyboard
+    user: ierturk
+    # healthcheck:
+    #     test: ["CMD", "test", "-S", "/tmp/.X11-unix/X0"]
+    #     interval: 5s
+    #     timeout: 4s
+    #     retries: 6
+    #     start_period: 10s
+
+  app:
+    image: ierturk/debian-app:latest
+    security_opt:
+      - seccomp:unconfined
+    shm_size: '256mb'
+    volumes:
+      - type: bind
+        source: /tmp
+        target: /tmp
+      - type: bind
+        source: /dev
+        target: /dev
+      - type: bind
+        source: /run/udev
+        target: /run/udev
+      - type: bind
+        source: /tmp/1000-runtime-dir
+        target: /tmp/1000-runtime-dir
+      - type: bind
+        source: ../..
+        target: /workspace
+      - type: bind
+        source: ~/.ssh
+        target: /home/ierturk/.ssh
+        read_only: true
+    # cap_add:
+      - CAP_SYS_TTY_CONFIG
+      - SYS_PTRACE
+    # Add device access rights through cgroup...
+    device_cgroup_rules:
+      # ... for tty0
+      - 'c 4:0 rmw'
+      # ... for tty7
+      - 'c 4:7 rmw'
+      # ... for /dev/input devices
+      - 'c 13:* rmw'
+      - 'c 199:* rmw'
+      # ... for /dev/dri devices
+      - 'c 226:* rmw'
+      - 'c 81:* rmw'
+    entrypoint: /usr/sbin/sshd -p 2222 -D
+    network_mode: host
+    privileged: true
+    environment:
+      - WAYLAND_USER=ierturk
+      - XDG_RUNTIME_DIR=/tmp/1000-runtime-dir
+      - WAYLAND_DISPLAY=wayland-0
+      - DISPLAY=:0
+      - QT_QPA_PLATFORM=wayland
+      - ORT_TENSORRT_FP16_ENABLE=1
+      - ORT_TENSORRT_ENGINE_CACHE_ENABLE=1
+      - ORT_TENSORRT_CACHE_PATH=/workspace/run/ort/engine
+      - ORT_TENSORRT_DUMP_SUBGRAPHS=1
+    user: root
+    working_dir: /workspace
+    depends_on:
+      - wayland
