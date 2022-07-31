@@ -1,4 +1,4 @@
-name: Alpine VSCode
+name: Alpine SwayVnc
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ierturk/alpine-vscode
+            ierturk/alpine-swayvnc
           tags: |
             type=raw,value={{date 'YYYYMMDD-hhmm'}}
       -
@@ -38,12 +38,12 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./Alpine
-          file: ./Alpine/vscode.Dockerfile
+          file: ./Alpine/swayvnc.Dockerfile
           platforms: linux/amd64, linux/arm64, linux/arm/v7
           push: true
-          tags: ${{ steps.meta.outputs.tags }}, ierturk/alpine-vscode:latest
+          tags: ${{ steps.meta.outputs.tags }}, ierturk/alpine-swayvnc:latest
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=ierturk/alpine-vscode:latest
+          cache-from: type=registry,ref=ierturk/alpine-swayvnc:latest
           cache-to: type=inline
       -
         name: Image digest
