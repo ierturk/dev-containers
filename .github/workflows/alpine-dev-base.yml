@@ -1,4 +1,4 @@
-name: Alpine VSCode
+name: Alpine Dev Base
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ierturk/alpine-vscode
+            ierturk/alpine-dev-base
           tags: |
             type=raw,value={{date 'YYYYMMDD-hhmm'}}
       -
@@ -38,12 +38,12 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./Alpine
-          file: ./Alpine/vscode.Dockerfile
+          file: ./Alpine/dev-base.Dockerfile
           platforms: linux/amd64, linux/arm64, linux/arm/v7
           push: true
-          tags: ${{ steps.meta.outputs.tags }}, ierturk/alpine-vscode:latest
+          tags: ${{ steps.meta.outputs.tags }}, ierturk/alpine-dev-base:latest
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=ierturk/alpine-vscode:latest
+          cache-from: type=registry,ref=ierturk/alpine-dev-base:latest
           cache-to: type=inline
       -
         name: Image digest

@@ -10,7 +10,7 @@ ARG USERNAME=ierturk
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 COPY assets/script-library/*.sh assets/script-library/*.env /tmp/library-scripts/
-RUN apk update && ash /tmp/library-scripts/common-alpine.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" \
+RUN apk update && ash /tmp/library-scripts/dev-base.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" \
     && rm -rf /tmp/library-scripts
 
 # ** [Optional] Uncomment this section to install additional packages. **
