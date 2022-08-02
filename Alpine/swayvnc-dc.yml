@@ -1,0 +1,103 @@
+version: '2.4'
+
+services:
+  swayvnc:
+    image: ierturk/alpine-swayvnc:latest
+    volumes:
+      - type: bind
+        source: /tmp
+        target: /tmp
+      - type: bind
+        source: /run/user/1000
+        target: /run/user/1000
+      - type: bind
+        source: /dev
+        target: /dev
+      - type: bind
+        source: /run/udev
+        target: /run/udev
+      - type: bind
+        source: ../..
+        target: /workspace
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    # Add device access rights through cgroup...
+    device_cgroup_rules:
+      # ... for tty0
+      - 'c 4:0 rmw'
+      # ... for tty7
+      - 'c 4:7 rmw'
+      # ... for /dev/input devices
+      - 'c 13:* rmw'
+      - 'c 199:* rmw'
+      # ... for /dev/dri devices
+      - 'c 226:* rmw'
+      - 'c 81:* rmw'
+    entrypoint: /entrypoint.sh
+    network_mode: host
+    privileged: true
+    environment:
+      - XDG_RUNTIME_DIR=/run/user/1000
+      - WLR_BACKENDS=headless
+      - WLR_LIBINPUT_NO_DEVICES=1
+      - SWAYSOCK=/run/user/1000/sway-ipc.sock
+
+  app:
+    image: ierturk/alpine-dev-qt:latest
+    security_opt:
+      - seccomp:unconfined
+    shm_size: '256mb'
+    volumes:
+      - type: bind
+        source: /tmp
+        target: /tmp
+      - type: bind
+        source: /run/user/1000
+        target: /run/user/1000
+      - type: bind
+        source: /dev
+        target: /dev
+      - type: bind
+        source: /run/udev
+        target: /run/udev
+      - type: bind
+        source: ../..
+        target: /workspace
+      # - type: bind
+      #   source: ~/.ssh
+      #   target: /home/ierturk/.ssh
+      #   read_only: true
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+      - SYS_PTRACE
+    # Add device access rights through cgroup...
+    device_cgroup_rules:
+      # ... for tty0
+      - 'c 4:0 rmw'
+      # ... for tty7
+      - 'c 4:7 rmw'
+      # ... for /dev/input devices
+      - 'c 13:* rmw'
+      - 'c 199:* rmw'
+      # ... for /dev/dri devices
+      - 'c 226:* rmw'
+      - 'c 81:* rmw'
+    stdin_open: true
+    tty: true
+    network_mode: host
+    privileged: true
+    environment:
+      - WAYLAND_USER=ierturk
+      - XDG_RUNTIME_DIR=/run/user/1000
+      - WAYLAND_DISPLAY=wayland-1
+      - DISPLAY=:0
+      - QT_QPA_PLATFORM=wayland
+      - QT_QPA_EGLFS_INTEGRATION="eglfs_kms"
+      - QT_QPA_EGLFS_KMS_ATOMIC="1"
+      - QT_QPA_EGLFS_KMS_CONFIG="/etc/kms.conf"      
+      - IGNORE_X_LOCKS=1
+      - QT_IM_MODULE=qtvirtualkeyboard
+    user: ierturk
+    working_dir: /workspace
+    depends_on:
+      - swayvnc
