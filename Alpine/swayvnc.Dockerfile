@@ -21,7 +21,7 @@ RUN apk add --no-cache msttcorefonts-installer fontconfig \
     && update-ms-fonts
 
 # Add application user
-RUN addgroup -S $USER && adduser -S $USER -G $USER -G abuild
+RUN addgroup -g 1000 $USER && adduser -u 1000 -G $USER -h /home/$USER -D $USER
 
 # Iinstall vnc packages
 RUN apk add --no-cache wayvnc neatvnc
@@ -33,7 +33,7 @@ COPY assets/swayvnc/kms.conf /etc/kms.conf
 # Add wayvnc to compositor startup and put IPC on the network
 RUN mkdir /etc/sway/config.d \
     && echo "exec wayvnc 0.0.0.0 5900" >> /etc/sway/config.d/exec \
-    && echo "exec \"socat TCP-LISTEN:7023,fork UNIX-CONNECT:/tmp/sway-ipc.sock\"" >> /etc/sway/config.d/exec \
+    && echo "exec \"socat TCP-LISTEN:7023,fork UNIX-CONNECT:/run/user/1000/sway-ipc.sock\"" >> /etc/sway/config.d/exec \
     && mkdir -p /home/$USER/.config/wayvnc/ \
     && printf "\
 address=$VNC_LISTEN_ADDRESS\n\
