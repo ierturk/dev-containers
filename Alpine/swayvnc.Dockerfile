@@ -28,6 +28,7 @@ RUN apk add --no-cache wayvnc neatvnc
 
 # Copy sway config
 COPY assets/swayvnc/config /etc/sway/config
+COPY assets/swayvnc/kms.conf /etc/kms.conf
 
 # Add wayvnc to compositor startup and put IPC on the network
 RUN mkdir /etc/sway/config.d \
